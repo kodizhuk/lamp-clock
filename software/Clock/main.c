@@ -67,6 +67,7 @@ uint8_t EEMEM eepDisplayAnimation;
 uint8_t EEMEM eepColor[3];
 
 void Init(void);
+void Loading(void);
 void SetTaskTimer(uint8_t newNumber, uint16_t newTime);
 
 void CheckUpdateTime();
@@ -104,6 +105,8 @@ ISR(TIMER1_OVF_vect)
 int main(void)
 {
 	Init();
+	Loading();
+	RestoreSettingsFromEeprom();
 
     while (1) 
     {
@@ -135,7 +138,6 @@ void Init(void)
 	/*display initialization*/
 	DisplayInit();
 	
-
 	/*RTC initialization*/
  	i2c_init();
  	rtc_init(0, 1, 0);
@@ -147,27 +149,25 @@ void Init(void)
  	
  	BrightnessInit();
 
-	/*restore all settings from eeprom*/
- 	//eeprom_write_byte(&eepIsExist,0xFF);		//check default
- 	if(eeprom_read_byte(&eepIsExist)==0xFF)
- 	{
- 		/*default settings*/
- 		for(i=0;i<3;i++)
- 			eeprom_write_byte(&eepColor[i],0);
- 		eeprom_write_byte(&eepBrightnessLedMax,99);
- 		eeprom_write_byte(&eepBrightnessLedMin,5);
- 		eeprom_write_byte(&eepBrightnessDigitMax,99);
- 		eeprom_write_byte(&eepBrightnessDigitMin,10);
- 		eeprom_write_byte(&eepNumLedAnimation,4);
- 		eeprom_write_byte(&eepNumDigitAnimation,0);
- 		eeprom_write_byte(&eepDisplayAnimation,1);		//0-short, 1 - long animation
- 		eeprom_write_byte(&eepIsExist,0x00);
- 	}
- 
- 	/*restore settings*/
- 	RestoreSettingsFromEeprom();
-
 	sei();
+}
+
+void Loading(void)
+{
+	uint8_t i;
+
+	dataToDisplay[0] = OFF_NUMB;
+	dataToDisplay[1] = OFF_NUMB;
+	dataToDisplay[2] = OFF_NUMB;
+	DisplaySetData3Num(dataToDisplay);
+	LedOffAll();
+	_delay_ms(300);
+	for(i=0;i<6;i++)
+	{
+		LedSetColorRGB(i,255,20,0);
+		LedUpdate();
+		_delay_ms(100);
+	}	
 }
 
 void SetTaskTimer(uint8_t newNumber, uint16_t newTime)
@@ -299,18 +299,34 @@ void GotoMenu()
 	SetTaskTimer(ACTION4,100);
 }
 
-
-
 void RestoreSettingsFromEeprom()
 {
+	uint8_t i;
+	/*restore all settings from eeprom*/
+	//eeprom_write_byte(&eepIsExist,0xFF);		//check default
+	if(eeprom_read_byte(&eepIsExist)==0xFF)
+	{
+		/*default settings*/
+		for(i=0;i<3;i++)
+		eeprom_write_byte(&eepColor[i],0);
+		eeprom_write_byte(&eepBrightnessLedMax,99);
+		eeprom_write_byte(&eepBrightnessLedMin,5);
+		eeprom_write_byte(&eepBrightnessDigitMax,99);
+		eeprom_write_byte(&eepBrightnessDigitMin,10);
+		eeprom_write_byte(&eepNumLedAnimation,4);
+		eeprom_write_byte(&eepNumDigitAnimation,0);
+		eeprom_write_byte(&eepDisplayAnimation,1);		//0-short, 1 - long animation
+		eeprom_write_byte(&eepIsExist,0x00);
+	}
+
 	LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
 	DisplaySetBrightness100(eeprom_read_byte(&eepBrightnessDigitMax));
 	numLedAnimation = eeprom_read_byte(&eepNumLedAnimation);
 	numDigitAnimation = eeprom_read_byte(&eepNumDigitAnimation);
 	LedSetColorRGBAllLed(
-	eeprom_read_byte(&eepColor[0]),
-	eeprom_read_byte(&eepColor[1]),
-	eeprom_read_byte(&eepColor[2]));
+		eeprom_read_byte(&eepColor[0]),
+		eeprom_read_byte(&eepColor[1]),
+		eeprom_read_byte(&eepColor[2]));
 	DisplayRequestUpdateLed();
 	if(eeprom_read_byte(&eepDisplayAnimation))
 		DisplaySetAnimation(LONG_BLINC);

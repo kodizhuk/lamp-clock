@@ -130,12 +130,6 @@
     <Compile Include="control.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="delay.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="delay.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="display.c">
       <SubType>compile</SubType>
     </Compile>
