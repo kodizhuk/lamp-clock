@@ -140,11 +140,11 @@ uint8_t StartMenu(void)
 			case 0:		//hour, min, date, month, year
 				MenuTime();
 				break;
-			case 2:		//brightness digit/led (day and night mode)	
-				//MenuBrigtness();
-				break;
 			case 1:		//choice led animation ,digit animation
 				MenuLedAnimation();
+				break;
+			case 2:		//brightness digit/led (day and night mode)	
+				//MenuBrigtness();
 				break;
 			case 3:	
 				break;
