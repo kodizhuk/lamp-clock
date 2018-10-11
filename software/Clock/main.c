@@ -156,9 +156,7 @@ void Loading(void)
 {
 	uint8_t i;
 
-	dataToDisplay[0] = OFF_NUMB;
-	dataToDisplay[1] = OFF_NUMB;
-	dataToDisplay[2] = OFF_NUMB;
+	DisplayClear();
 	DisplaySetData3Num(dataToDisplay);
 	LedOffAll();
 	_delay_ms(300);
