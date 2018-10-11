@@ -16,7 +16,7 @@
  #include "ledLight.h"
 
  void MenuTime();
- //void MenuBrigtness();
+ void MenuLedStaticColor();
  void MenuLedAnimation();
 
  extern void RestoreSettingsFromEeprom(void);
@@ -144,7 +144,7 @@ uint8_t StartMenu(void)
 				MenuLedAnimation();
 				break;
 			case 2:		//brightness digit/led (day and night mode)	
-				//MenuBrigtness();
+				MenuLedStaticColor();
 				break;
 			case 3:	
 				break;
@@ -323,130 +323,11 @@ void MenuTime()
 }
 
 
- //void MenuBrigtness()
- //{
- 	///*додати плавне моргання для узера, до першого прокручування енкодера*/
- 	//uint8_t i;
- 	//uint8_t pressedDelay = 0;
- 	//uint8_t SPEED_CHANGE_IN_PRESSED = 100;
- //
- 	//enum {BRIGHTNESS_DIGIT, BRIGHTNESS_LED, BRIGHTNESS_DIGIT_NIGHT, BRIGHTNESS_LED_NIGHT, EXIT};
- 	//uint8_t currentSettings = BRIGHTNESS_DIGIT;
- //
- 	//uint8_t tmpBrightness = eeprom_read_byte(&eepBrightnessDigitMax);
- //
- 	//LedOffAll();
- 	//LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
- 	//for(i=4; i<6; i++)
- 		//LedSetColor(i, colorBacklightChoice);
- 	//DisplayRequestUpdateLed();
- //
- 	//dataToDisplay[0] = OFF_NUMB;
- 	//dataToDisplay[1] = OFF_NUMB;
- 	//dataToDisplay[2] = tmpBrightness;
- 	//DisplaySetBrightness100(99);
- 	//DisplaySetData3Num(dataToDisplay);
- 	//
- 	//while(currentSettings != EXIT)
- 	//{
- 		//controlState = ControlCheck();
- 		//
- 		//if(controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
- 		//{
- 			//if(controlState == PRESS_LEFT || pressedDelay >SPEED_CHANGE_IN_PRESSED)
- 			//{
- 				//tmpBrightness++;
- //
- 				//if(tmpBrightness >= 100)
- 					//tmpBrightness = 0;
- 				//dataToDisplay[2] = tmpBrightness;
- 				//DisplaySetData3Num(dataToDisplay);
- //
- 				//if(currentSettings == BRIGHTNESS_DIGIT || currentSettings == BRIGHTNESS_DIGIT_NIGHT)
- 				//{
- 					//DisplaySetBrightness100(tmpBrightness);
- 				//}
- 				//else if(currentSettings == BRIGHTNESS_LED || currentSettings == BRIGHTNESS_LED_NIGHT)
- 				//{
- 					//LedSetBrigtness(tmpBrightness);
- 					//for(i=4; i<6; i++)
- 						//LedSetColor(i, colorBacklightChoice);
- 					//DisplayRequestUpdateLed();
- 				//}
- 				//pressedDelay = 0;
- 			//}else
- 				//pressedDelay ++;
- 		//}else
- 		//if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
- 		//{
- 			//if(controlState == PRESS_RIGHT || pressedDelay >SPEED_CHANGE_IN_PRESSED)
- 			//{
- 				//tmpBrightness--;
- 				//if(tmpBrightness >= 100)
- 					//tmpBrightness = 99;
- 				//dataToDisplay[2] = tmpBrightness;
- 				//DisplaySetData3Num(dataToDisplay);
- //
- 				//if(currentSettings == BRIGHTNESS_DIGIT || currentSettings == BRIGHTNESS_DIGIT_NIGHT)
- 					//DisplaySetBrightness100(tmpBrightness);
- 				//else if(currentSettings == BRIGHTNESS_LED || currentSettings == BRIGHTNESS_LED_NIGHT)
- 				//{
- 					//LedSetBrigtness(tmpBrightness);
- 					//for(i=4; i<6; i++)
- 						//LedSetColor(i, colorBacklightChoice);
- 					//DisplayRequestUpdateLed();
- 				//}
- 				//pressedDelay = 0;
- 			//}else
- 				//pressedDelay ++;
- 		//}else
- 		//if(controlState == PRESS_CENTER)
- 		//{
- 				//if(currentSettings == BRIGHTNESS_DIGIT)
- 				//{
- 					//eeprom_write_byte(&eepBrightnessDigitMax, tmpBrightness);	//save brightness digit
- 					///*next setting - led brightness*/
- 					//tmpBrightness = eeprom_read_byte(&eepBrightnessLedMax);
- 					////LedOffAll();
- 					//for(i=4; i<6; i++)
- 						//LedSetColor(i, colorBacklightChoice);
- 					//DisplayRequestUpdateLed();
- 					//
- 				//}else if(currentSettings == BRIGHTNESS_LED)
- 				//{
- 					//eeprom_write_byte(&eepBrightnessLedMax, tmpBrightness);		//save brightness led
- 					///*next setting - digit brightness night*/
- 					//tmpBrightness = eeprom_read_byte(&eepBrightnessDigitMin);
- 					//DisplaySetBrightness100(tmpBrightness);
- 					//LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMin));
- 					//for(i=4; i<6; i++)
- 						//LedSetColor(i, colorBacklightChoice);
- 					//DisplayRequestUpdateLed();
- 				//}
- 				//else if(currentSettings == BRIGHTNESS_DIGIT_NIGHT)
- 				//{
- 					//eeprom_write_byte(&eepBrightnessDigitMin, tmpBrightness);		//save brightness digit night
- 					///*next setting - led brightness night*/
- 					//tmpBrightness = eeprom_read_byte(&eepBrightnessLedMin);		//0-99 diapason
- 					////LedOffAll();
- 					//LedSetBrigtness(tmpBrightness);
- 					//for(i=4; i<6; i++)
- 						//LedSetColor(i, colorBacklightChoice);
- 					//DisplayRequestUpdateLed();
- 				//}else if(currentSettings == BRIGHTNESS_LED_NIGHT)
- 				//{
- 					//eeprom_write_byte(&eepBrightnessLedMin, tmpBrightness);		//save brightness led night
- 				//}
- //
- 				///*display new digit*/
- 				//dataToDisplay[2] = tmpBrightness;
- 				//DisplaySetData3Num(dataToDisplay);
- //
- 				//currentSettings++;
- 		//}
- 		//_delay_ms(1);
- 	//}
- //}
+ void MenuLedStaticColor()
+ {
+ 	uint8_t i;
+
+ }
 
 void MenuLedAnimation()
 {
