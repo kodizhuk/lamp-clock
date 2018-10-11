@@ -302,6 +302,9 @@ void GotoMenu()
 void RestoreSettingsFromEeprom()
 {
 	uint8_t i;
+
+	LedOffAll();
+
 	/*restore all settings from eeprom*/
 	//eeprom_write_byte(&eepIsExist,0xFF);		//check default
 	if(eeprom_read_byte(&eepIsExist)==0xFF)
@@ -323,11 +326,7 @@ void RestoreSettingsFromEeprom()
 	DisplaySetBrightness100(eeprom_read_byte(&eepBrightnessDigitMax));
 	numLedAnimation = eeprom_read_byte(&eepNumLedAnimation);
 	numDigitAnimation = eeprom_read_byte(&eepNumDigitAnimation);
-	LedSetColorRGBAllLed(
-		eeprom_read_byte(&eepColor[0]),
-		eeprom_read_byte(&eepColor[1]),
-		eeprom_read_byte(&eepColor[2]));
-	DisplayRequestUpdateLed();
+
 	if(eeprom_read_byte(&eepDisplayAnimation))
 		DisplaySetAnimation(LONG_BLINC);
 	else
