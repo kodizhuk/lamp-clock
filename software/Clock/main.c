@@ -64,7 +64,7 @@ uint8_t EEMEM eepBrightnessDigitMin;
 uint8_t EEMEM eepNumLedAnimation;
 uint8_t EEMEM eepNumDigitAnimation;
 uint8_t EEMEM eepDisplayAnimation;
-uint8_t EEMEM eepColor[3];
+uint8_t EEMEM eepLedColor[3];
 
 void Init(void);
 void Loading(void);
@@ -309,7 +309,7 @@ void RestoreSettingsFromEeprom()
 	{
 		/*default settings*/
 		for(i=0;i<3;i++)
-		eeprom_write_byte(&eepColor[i],0);
+			eeprom_write_byte(&eepLedColor[i],0);
 		eeprom_write_byte(&eepBrightnessLedMax,99);
 		eeprom_write_byte(&eepBrightnessLedMin,5);
 		eeprom_write_byte(&eepBrightnessDigitMax,99);
