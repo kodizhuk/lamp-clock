@@ -30,7 +30,7 @@
  extern uint8_t EEMEM eepNumLedAnimation;
  extern uint8_t EEMEM eepNumDigitAnimation;
  extern uint8_t EEMEM eepDisplayAnimation;
- extern uint8_t EEMEM eepColor[3];
+ extern uint8_t EEMEM eepLedColor[3];
 
 
  enum {DAY_MODE, NIGHT_MODE};
@@ -55,7 +55,7 @@ uint8_t StartMenu(void)
 	uint8_t i;
 	LedReadColor(0, &color[0], &color[1], &color[2]);
 	for(i=0;i<3;i++)
-		eeprom_write_byte(&eepColor[i],color[i]);
+		eeprom_write_byte(&eepLedColor[i],color[i]);
 
 	while(selectMenu != 5)		//select_menu = 6 - menu exit
 	{
@@ -325,8 +325,84 @@ void MenuTime()
 
  void MenuLedStaticColor()
  {
- 	uint8_t i;
+	enum {INPUT, EXIT};
+	uint8_t currentSettings = INPUT;
+	uint8_t ledColor[3] = {0, 0, 0};
+	uint8_t currentEffect = 0;
+	const uint8_t MAX_COLORS = 6;
+	uint8_t i;
 
+	DisplayClear();
+	LedOffAll();
+
+	LedSetBrigtness(LED_MAX_BRIGHTNESS);
+
+	ledColor[currentEffect] = LED_MAX_BRIGHTNESS;
+	LedSetColorRGBAllLed(ledColor[0], ledColor[1], ledColor[2]);
+	LedUpdate();
+
+	dataToDisplay[0] = OFF_NUMB;
+	dataToDisplay[1] = currentEffect;
+	dataToDisplay[2] = OFF_NUMB;
+	DisplaySetData3Num(dataToDisplay);
+	uint8_t allColors[6][3] = {
+		{255,	0,		0},		//red
+		{255,	255,	0},		//yelLow
+		{0,		255,	0},		//green
+		{0,		255,	255},	//PINK
+		{0,		0,		255},	//blue
+		{255,	0,		255}};
+
+	while(currentSettings != EXIT)
+	{
+		controlState = ControlCheck();
+
+		
+
+		/*display number on display*/
+		switch(controlState)
+		{
+			case PRESS_LEFT:
+				
+				if(currentEffect < MAX_COLORS-1)
+					currentEffect++;
+				else
+					currentEffect = 0;
+				dataToDisplay[1] = currentEffect;
+				DisplaySetData3Num(dataToDisplay);
+				
+				for(i=0; i<3; i++)
+					ledColor[i] = allColors[currentEffect][i];
+				LedSetColorRGBAllLed(ledColor[0], ledColor[1], ledColor[2]);
+				LedUpdate();
+				break;
+			case PRESS_RIGHT:
+				
+				if(currentEffect == 0)
+					currentEffect = MAX_COLORS-1;
+				else
+					currentEffect--;
+				dataToDisplay[1] = currentEffect;
+				DisplaySetData3Num(dataToDisplay);
+
+				for(i=0; i<3; i++)
+					ledColor[i] = allColors[currentEffect][i];
+				LedSetColorRGBAllLed(ledColor[0], ledColor[1], ledColor[2]);
+				LedUpdate();
+				break;
+			case PRESS_CENTER:
+				currentSettings = EXIT;
+				eeprom_write_byte(&eepNumLedAnimation, 5);	//static color led animation
+				eeprom_write_byte(&eepLedColor[0], ledColor[0]);
+				eeprom_write_byte(&eepLedColor[1], ledColor[1]);
+				eeprom_write_byte(&eepLedColor[2], ledColor[2]);
+				break;
+			default:
+			/*if delay xx min - exit from menu*/
+				break;
+		}
+		_delay_ms(1);
+	}
  }
 
 void MenuLedAnimation()
