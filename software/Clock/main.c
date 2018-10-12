@@ -323,6 +323,12 @@ void RestoreSettingsFromEeprom()
 	LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
 	DisplaySetBrightness100(eeprom_read_byte(&eepBrightnessDigitMax));
 	numLedAnimation = eeprom_read_byte(&eepNumLedAnimation);
+	if(numLedAnimation == 5)
+	{
+		LedSetColorRGBAllLed(eeprom_read_byte(&eepLedColor[0]), 
+							eeprom_read_byte(&eepLedColor[1]),
+							eeprom_read_byte(&eepLedColor[2]));
+	}
 	numDigitAnimation = eeprom_read_byte(&eepNumDigitAnimation);
 
 	if(eeprom_read_byte(&eepDisplayAnimation))
