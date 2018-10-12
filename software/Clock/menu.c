@@ -327,75 +327,41 @@ void MenuTime()
  {
 	enum {INPUT, EXIT};
 	uint8_t currentSettings = INPUT;
-	uint8_t ledColor[3] = {0, 0, 0};
-	uint8_t currentEffect = 0;
-	const uint8_t MAX_COLORS = 6;
-	uint8_t i;
-
+	uint8_t r, g, b;
 	DisplayClear();
 	LedOffAll();
 
 	LedSetBrigtness(LED_MAX_BRIGHTNESS);
 
-	ledColor[currentEffect] = LED_MAX_BRIGHTNESS;
-	LedSetColorRGBAllLed(ledColor[0], ledColor[1], ledColor[2]);
+	LedOffAll();
 	LedUpdate();
 
-	dataToDisplay[0] = OFF_NUMB;
-	dataToDisplay[1] = currentEffect;
-	dataToDisplay[2] = OFF_NUMB;
+	dataToDisplay[0] = 0;
+	dataToDisplay[1] = 0;
+	dataToDisplay[2] = 0;
 	DisplaySetData3Num(dataToDisplay);
-	uint8_t allColors[6][3] = {
-		{255,	0,		0},		//red
-		{255,	255,	0},		//yelLow
-		{0,		255,	0},		//green
-		{0,		255,	255},	//PINK
-		{0,		0,		255},	//blue
-		{255,	0,		255}};
 
 	while(currentSettings != EXIT)
 	{
 		controlState = ControlCheck();
 
-		
-
 		/*display number on display*/
 		switch(controlState)
 		{
 			case PRESS_LEFT:
+				LedAllColorAnim(20,UP);
 				
-				if(currentEffect < MAX_COLORS-1)
-					currentEffect++;
-				else
-					currentEffect = 0;
-				dataToDisplay[1] = currentEffect;
-				DisplaySetData3Num(dataToDisplay);
-				
-				for(i=0; i<3; i++)
-					ledColor[i] = allColors[currentEffect][i];
-				LedSetColorRGBAllLed(ledColor[0], ledColor[1], ledColor[2]);
-				LedUpdate();
 				break;
 			case PRESS_RIGHT:
-				
-				if(currentEffect == 0)
-					currentEffect = MAX_COLORS-1;
-				else
-					currentEffect--;
-				dataToDisplay[1] = currentEffect;
-				DisplaySetData3Num(dataToDisplay);
-
-				for(i=0; i<3; i++)
-					ledColor[i] = allColors[currentEffect][i];
-				LedSetColorRGBAllLed(ledColor[0], ledColor[1], ledColor[2]);
-				LedUpdate();
+				LedAllColorAnim(20,DOWN);
 				break;
 			case PRESS_CENTER:
 				currentSettings = EXIT;
+				LedReadColor(0, &r, &g, &b);
 				eeprom_write_byte(&eepNumLedAnimation, 5);	//static color led animation
-				eeprom_write_byte(&eepLedColor[0], ledColor[0]);
-				eeprom_write_byte(&eepLedColor[1], ledColor[1]);
-				eeprom_write_byte(&eepLedColor[2], ledColor[2]);
+ 				eeprom_write_byte(&eepLedColor[0], r);
+ 				eeprom_write_byte(&eepLedColor[1], g);
+ 				eeprom_write_byte(&eepLedColor[2], b);
 				break;
 			default:
 			/*if delay xx min - exit from menu*/
