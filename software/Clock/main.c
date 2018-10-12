@@ -261,22 +261,28 @@ void DisplayOtherInfo()
  	switch (eeprom_read_byte(&eepNumLedAnimation))
  	{
  		case 0:
- 		LedOffAll();
- 		break;
+ 			LedOffAll();
+ 			break;
  		case 1:
- 		LedTheaterChaseRainbow();
- 		break;
+ 			LedTheaterChaseRainbow();
+ 			break;
  		case 2:
- 		LedRainbowCycle();
- 		break;
+ 			LedRainbowCycle();
+ 			break;
  		case 3:
- 		LedRainbow();
- 		break;
+ 			LedRainbow();
+ 			break;
  		case 4:
- 		LedAllColorAnim(10, UP);
- 		break;
+ 			LedAllColorAnim(10, UP);
+ 			break;
+		case 5:
+			LedSetColorRGBAllLed(eeprom_read_byte(&eepLedColor[0]),
+								eeprom_read_byte(&eepLedColor[1]),
+								eeprom_read_byte(&eepLedColor[2]));
+			DisplayRequestUpdateLed();
+			break;
  		default:
- 		break;
+ 			break;
  	} 
 
 	SetTaskTimer(ACTION3,100);
