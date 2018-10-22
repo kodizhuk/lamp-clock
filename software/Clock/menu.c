@@ -46,16 +46,14 @@ uint8_t color[3];
 
 uint8_t StartMenu(void)
 {
-	uint8_t mainMenu[] = {1,2,3,4,5,6};
+	uint8_t mainMenu[] = {1, 2, 3, 4, 5, 6};
 	uint8_t selectMenu = 0;
-	uint8_t pressedDelay = 0;
-	const uint8_t SPEED_CHANGE_IN_PRESSED = 20;
 
 	/*save led color, led brightness, digit brightness, number led animation, digit animation, display animation*/
 	uint8_t i;
 	LedReadColor(0, &color[0], &color[1], &color[2]);
-	for(i=0;i<3;i++)
-		eeprom_write_byte(&eepLedColor[i],color[i]);
+	for(i = 0; i < 3; i++)
+		eeprom_write_byte(&eepLedColor[i], color[i]);
 
 	while(selectMenu != 5)		//select_menu = 6 - menu exit
 	{
@@ -67,7 +65,7 @@ uint8_t StartMenu(void)
 		lowDigitBrightness = highDigitBrigtness/5;
 		digitBrightness[0] = highDigitBrigtness;
 		digitBlink[0] = 1;
-		for(i=1;i<NUM_DIGIT;i++)														//to lower other digit	
+		for(i = 1; i < NUM_DIGIT; i++)														//to lower other digit	
 		{																		
 			digitBrightness[i] = lowDigitBrightness;
 			digitBlink[i] = 0;
@@ -81,51 +79,43 @@ uint8_t StartMenu(void)
 
 		LedOffAll();																	//enable led only "select menu" digit
 		LedSetColor(selectMenu, colorBacklightChoice);
-		for(i=4; i<6; i++)
+		for(i = 4; i < 6; i++)
 			DisplayRequestUpdateLed();
 
 		while((controlState=ControlCheck()) != PRESS_CENTER)
 		{
 			if(controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
 			{
-				if(controlState == PRESS_LEFT && pressedDelay >SPEED_CHANGE_IN_PRESSED)
-				{
-					digitBrightness[selectMenu] = lowDigitBrightness;
-					digitBlink[selectMenu] = 0;
+				digitBrightness[selectMenu] = lowDigitBrightness;
+				digitBlink[selectMenu] = 0;
 
-					if(++selectMenu == NUM_DIGIT)
-						selectMenu = 0;
-					digitBrightness[selectMenu] = highDigitBrigtness;
-					digitBlink[selectMenu] = 1;
-					DisplaySetBrightnessEachNumber100(digitBrightness);
-					DisplaySetBlinkDigit(digitBlink);
+				if(++selectMenu == NUM_DIGIT)
+					selectMenu = 0;
+				digitBrightness[selectMenu] = highDigitBrigtness;
+				digitBlink[selectMenu] = 1;
+				DisplaySetBrightnessEachNumber100(digitBrightness);
+				DisplaySetBlinkDigit(digitBlink);
 
-					LedOffAll();
-					LedSetColor(selectMenu, colorBacklightChoice);
-					DisplayRequestUpdateLed();
-					pressedDelay = 0;
-				}else
-					pressedDelay++;
+				LedOffAll();
+				LedSetColor(selectMenu, colorBacklightChoice);
+				DisplayRequestUpdateLed();
+				_delay_ms(100);
 			}
 			if (controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
 			{
-				if(controlState == PRESS_RIGHT && pressedDelay >SPEED_CHANGE_IN_PRESSED)
-				{
-					digitBrightness[selectMenu]=lowDigitBrightness;
-					digitBlink[selectMenu] = 0;
-					if (--selectMenu>NUM_DIGIT)
-						selectMenu = NUM_DIGIT-1;
-					digitBrightness[selectMenu] = highDigitBrigtness;
-					digitBlink[selectMenu] = 1;
-					DisplaySetBrightnessEachNumber100(digitBrightness);
-					DisplaySetBlinkDigit(digitBlink);
+				digitBrightness[selectMenu] = lowDigitBrightness;
+				digitBlink[selectMenu] = 0;
+				if (--selectMenu > NUM_DIGIT)
+					selectMenu = NUM_DIGIT - 1;
+				digitBrightness[selectMenu] = highDigitBrigtness;
+				digitBlink[selectMenu] = 1;
+				DisplaySetBrightnessEachNumber100(digitBrightness);
+				DisplaySetBlinkDigit(digitBlink);
 
-					LedOffAll();
-					LedSetColor(selectMenu, colorBacklightChoice);
-					DisplayRequestUpdateLed();
-					pressedDelay = 0;
-				}else
-					pressedDelay ++;
+				LedOffAll();
+				LedSetColor(selectMenu, colorBacklightChoice);
+				DisplayRequestUpdateLed();
+				_delay_ms(100);
 			}
 
 			_delay_ms(1);
@@ -164,11 +154,7 @@ uint8_t StartMenu(void)
 		}
 	}
 
-	/*restore all setting from eeprom*/
-	/*restore led color, led brightness, digit brightness, number led animation, digit animation, display animation*/
-
 	RestoreSettingsFromEeprom();
-	//set brightness led and digit
 
 	return 1;
 }
