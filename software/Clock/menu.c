@@ -350,27 +350,20 @@ void MenuTime()
 		controlState = ControlCheck();
 
 		/*display number on display*/
-		switch(controlState)
+		if (controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
+			LedAllColorAnim(20,UP);
+		else if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
+			LedAllColorAnim(20,DOWN);
+		else if (controlState == PRESS_CENTER)
 		{
-			case PRESS_LEFT:
-				LedAllColorAnim(20,UP);
-				
-				break;
-			case PRESS_RIGHT:
-				LedAllColorAnim(20,DOWN);
-				break;
-			case PRESS_CENTER:
-				LedReadColor(0, &r, &g, &b);
-				eeprom_write_byte(&eepNumLedAnimation, 5);	//static color led animation
- 				eeprom_write_byte(&eepLedColor[0], r);
- 				eeprom_write_byte(&eepLedColor[1], g);
- 				eeprom_write_byte(&eepLedColor[2], b);
-				break;
-			default:
-			/*if delay xx min - exit from menu*/
-				break;
+			LedReadColor(0, &r, &g, &b);
+			eeprom_write_byte(&eepNumLedAnimation, 5);	//static color led animation
+			eeprom_write_byte(&eepLedColor[0], r);
+			eeprom_write_byte(&eepLedColor[1], g);
+			eeprom_write_byte(&eepLedColor[2], b);
 		}
-		_delay_ms(1);
+
+		_delay_ms(100);
 	}
  }
 
