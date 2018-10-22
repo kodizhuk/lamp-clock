@@ -384,7 +384,7 @@ void MenuLedAnimation()
 
 	enum {INPUT, EXIT};
 
-	uint8_t tmpAnimation = eeprom_read_byte(&eepNumLedAnimation);
+	uint8_t tmpAnimation = 4;			//default animation
 	uint8_t currentSettings = 0;
 
 	LedOffAll();
