@@ -330,8 +330,7 @@ void MenuTime()
 
  void MenuLedStaticColor()
  {
-	enum {INPUT, EXIT};
-	uint8_t currentSettings = INPUT;
+	controlState = 0;
 	uint8_t r, g, b;
 	DisplayClear();
 	LedOffAll();
@@ -346,7 +345,7 @@ void MenuTime()
 	dataToDisplay[2] = 0;
 	DisplaySetData3Num(dataToDisplay);
 
-	while(currentSettings != EXIT)
+	while(controlState != PRESS_CENTER)
 	{
 		controlState = ControlCheck();
 
@@ -361,7 +360,6 @@ void MenuTime()
 				LedAllColorAnim(20,DOWN);
 				break;
 			case PRESS_CENTER:
-				currentSettings = EXIT;
 				LedReadColor(0, &r, &g, &b);
 				eeprom_write_byte(&eepNumLedAnimation, 5);	//static color led animation
  				eeprom_write_byte(&eepLedColor[0], r);
