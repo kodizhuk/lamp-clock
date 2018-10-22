@@ -330,7 +330,7 @@ void MenuTime()
 
  void MenuLedStaticColor()
  {
-	controlState = 0;
+	controlState = NO_PRESS;
 	uint8_t r, g, b;
 	DisplayClear();
 	LedOffAll();
