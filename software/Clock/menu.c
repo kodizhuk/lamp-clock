@@ -130,7 +130,7 @@ uint8_t StartMenu(void)
 
 			_delay_ms(1);
 		}
-
+		
 		digitBlink[selectMenu] = 0;			// off digit blink
 		DisplaySetBlinkDigit(digitBlink);	//
 
@@ -139,12 +139,18 @@ uint8_t StartMenu(void)
 		{
 			case 0:		//hour, min, date, month, year
 				MenuTime();
+				selectMenu = 5;
+				controlState = PRESS_CENTER;
 				break;
 			case 1:		//choice led animation ,digit animation
 				MenuLedAnimation();
+				selectMenu = 5;
+				controlState = PRESS_CENTER;
 				break;
 			case 2:		//brightness digit/led (day and night mode)	
 				MenuLedStaticColor();
+				selectMenu = 5;
+				controlState = PRESS_CENTER;
 				break;
 			case 3:	
 				break;
@@ -163,7 +169,6 @@ uint8_t StartMenu(void)
 
 	RestoreSettingsFromEeprom();
 	//set brightness led and digit
-
 
 	return 1;
 }
