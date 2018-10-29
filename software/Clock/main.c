@@ -209,7 +209,7 @@ void CheckUpdateTime()
  		tmpBright *= 2;
  		if(tmpBright > 255)
  			tmpBright = 255;
- 		if(tmpBright < 50)
+ 		if(tmpBright < 20)
  			tmpBright = 20;
  		LedSetBrigtness(tmpBright * 100 / 255);
 // 		DisplaySetBrightness(255);
