@@ -26,12 +26,6 @@
 
 #define MAX_NUM_OF_TIMERS   5
 
-/*for day/night mode*/
-#define DAY_MODE_START		0
-#define DAY_MODE_FIN		11
-#define NIGHT_MODE_START	12
-#define NIGHT_MODE_FIN		23
-
 /*time to display date*/
 #define DELAY_TO_DATE		1000		// period 6s 
 #define TIME_DISPLAY_DATE	20			//2s
@@ -81,7 +75,8 @@ ISR(TIMER1_OVF_vect)
 	uint8_t i;
 	for(i = 0; i < MAX_NUM_OF_TIMERS; i++)
 	{
-		if(SoftTimer[i].Number == 255)continue;     /*if timer empty, next timer*/
+		if(SoftTimer[i].Number == 255)
+			continue;     /*if timer empty, next timer*/
 		
 		if(SoftTimer[i].Time > 0)
 		{
