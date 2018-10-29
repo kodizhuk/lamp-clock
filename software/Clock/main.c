@@ -4,10 +4,7 @@
  * Created: 26.06.2017 21:49:57
  * Author : kodizhuk
  */ 
- /*	
-	4) пищалка
-	5) провітири підсвітку, чи немає/небуде глюків
-*/
+
 #define F_CPU 8000000
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -36,8 +33,8 @@
 #define NIGHT_MODE_FIN		23
 
 /*time to display date*/
-#define DELAY_TO_DATE	1000		// period 6s 
-#define TIME_DISPLAY_DATE	20	//2s
+#define DELAY_TO_DATE		1000		// period 6s 
+#define TIME_DISPLAY_DATE	20			//2s
 
 /*task timer*/
 uint8_t flag[MAX_NUM_OF_TIMERS];
@@ -82,13 +79,13 @@ void RestoreSettingsFromEeprom();
 ISR(TIMER1_OVF_vect)
 {
 	uint8_t i;
-	for(i=0; i<MAX_NUM_OF_TIMERS; i++)
+	for(i = 0; i < MAX_NUM_OF_TIMERS; i++)
 	{
 		if(SoftTimer[i].Number == 255)continue;     /*if timer empty, next timer*/
 		
 		if(SoftTimer[i].Time > 0)
 		{
-			SoftTimer[i].Time --;
+			SoftTimer[i].Time--;
 		}
 		else
 		{
@@ -123,12 +120,12 @@ void Init(void)
 {  
 	/*task time initialization*/
 	uint8_t i;
-	for(i=0; i<MAX_NUM_OF_TIMERS; i++)
+	for(i = 0; i < MAX_NUM_OF_TIMERS; i++)
 		SoftTimer[i].Number = 255;
 	TCCR1A = 0x00;
-	TCCR1B |= (1<<CS12)|(1<<CS10);		//divider clk/1024
-	TCNT1 = 65527;						//period 1ms
-	TIMSK |= (1<<TOIE1);				//interrupt to timer overflow
+	TCCR1B |= (1 << CS12) | (1 << CS10);		//divider clk/1024
+	TCNT1 = 65527;								//period 1ms
+	TIMSK |= (1 << TOIE1);						//interrupt to timer overflow
 
 	SetTaskTimer(ACTION1,10);
  	SetTaskTimer(ACTION2,10);			
@@ -160,9 +157,9 @@ void Loading(void)
 	DisplaySetData3Num(dataToDisplay);
 	LedOffAll();
 	_delay_ms(300);
-	for(i=0;i<6;i++)
+	for(i = 0; i < 6; i++)
 	{
-		LedSetColorRGB(i,255,20,0);
+		LedSetColorRGB(i, 255, 20, 0);
 		LedUpdate();
 		_delay_ms(100);
 	}	
@@ -172,25 +169,23 @@ void SetTaskTimer(uint8_t newNumber, uint16_t newTime)
 {
 	uint8_t i;
 	/*search existing timer*/
-	for(i=0; i< MAX_NUM_OF_TIMERS; i++)
+	for(i = 0; i < MAX_NUM_OF_TIMERS; i++)
 	{
 		if(SoftTimer[i].Number == newNumber)
 		{
 			/*set new time*/
 			SoftTimer[i].Time = newTime;
-			
 			return;
 		}
 	}
 	
 	/*search new empty timer*/
-	for(i=0; i< MAX_NUM_OF_TIMERS; i++)
+	for(i = 0; i < MAX_NUM_OF_TIMERS; i++)
 	{
 		if(SoftTimer[i].Number == 255)
 		{
 			SoftTimer[i].Number = newNumber;
 			SoftTimer[i].Time = newTime;
-			
 			return;
 		}
 	}
@@ -207,21 +202,21 @@ void CheckUpdateTime()
 	{
  		rtc_get_date(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
  			
- 		if(countToDateDisplay >= DELAY_TO_DATE+TIME_DISPLAY_DATE)	//delay to display date
+ 		if(countToDateDisplay >= DELAY_TO_DATE + TIME_DISPLAY_DATE)	//delay to display date
  			countToDateDisplay = 0;
-	}else
-	if(rtc_check_sqw()){
+	}else if(rtc_check_sqw())
+	{
 		rtc_get_time(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
 
 		/*change brightness*/
  		uint16_t tmpBright;
  		tmpBright = BrightnessGet();
- 		tmpBright*=2;
+ 		tmpBright *= 2;
  		if(tmpBright > 255)
  			tmpBright = 255;
  		if(tmpBright < 50)
  			tmpBright = 20;
- 		LedSetBrigtness(tmpBright*100/255);
+ 		LedSetBrigtness(tmpBright * 100 / 255);
 // 		DisplaySetBrightness(255);
 		
 //   		dataToDisplay[0] = OFF_NUMB;
@@ -231,7 +226,7 @@ void CheckUpdateTime()
 
 	DisplaySetData3Num(dataToDisplay);
 
-	SetTaskTimer(ACTION1,10);
+	SetTaskTimer(ACTION1, 10);
 
 }
 
@@ -239,14 +234,14 @@ void VerifyControl()
 {
 	flag[ACTION2] = 0;
 
-	if(controlState==NO_PRESS)
+	if(controlState == NO_PRESS)
 		controlState = ControlCheck();
 
 	/*ignore turn left/right*/
 	if(controlState != PRESS_CENTER)
 		controlState = NO_PRESS;
 	
-	SetTaskTimer(ACTION2,10);
+	SetTaskTimer(ACTION2, 10);
 }
 
 void DisplayOtherInfo()
@@ -285,7 +280,7 @@ void DisplayOtherInfo()
  			break;
  	} 
 
-	SetTaskTimer(ACTION3,100);
+	SetTaskTimer(ACTION3, 100);
 }
 
 void GotoMenu()
@@ -300,7 +295,7 @@ void GotoMenu()
 		controlState = NO_PRESS;
 	}
 
-	SetTaskTimer(ACTION4,100);
+	SetTaskTimer(ACTION4, 100);
 }
 
 void RestoreSettingsFromEeprom()
@@ -311,19 +306,19 @@ void RestoreSettingsFromEeprom()
 
 	/*restore all settings from eeprom*/
 	//eeprom_write_byte(&eepIsExist,0xFF);		//check default
-	if(eeprom_read_byte(&eepIsExist)==0xFF)
+	if(eeprom_read_byte(&eepIsExist) == 0xFF)
 	{
 		/*default settings*/
-		for(i=0;i<3;i++)
-			eeprom_write_byte(&eepLedColor[i],0);
-		eeprom_write_byte(&eepBrightnessLedMax,99);
-		eeprom_write_byte(&eepBrightnessLedMin,5);
-		eeprom_write_byte(&eepBrightnessDigitMax,99);
-		eeprom_write_byte(&eepBrightnessDigitMin,10);
-		eeprom_write_byte(&eepNumLedAnimation,4);
-		eeprom_write_byte(&eepNumDigitAnimation,0);
-		eeprom_write_byte(&eepDisplayAnimation,1);		//0-short, 1 - long animation
-		eeprom_write_byte(&eepIsExist,0x00);
+		for(i = 0; i < 3; i++)
+			eeprom_write_byte(&eepLedColor[i], 0);
+		eeprom_write_byte(&eepBrightnessLedMax, 99);
+		eeprom_write_byte(&eepBrightnessLedMin, 5);
+		eeprom_write_byte(&eepBrightnessDigitMax, 99);
+		eeprom_write_byte(&eepBrightnessDigitMin, 10);
+		eeprom_write_byte(&eepNumLedAnimation, 4);
+		eeprom_write_byte(&eepNumDigitAnimation, 0);
+		eeprom_write_byte(&eepDisplayAnimation, 1);		//0-short, 1 - long animation
+		eeprom_write_byte(&eepIsExist, 0x00);
 	}
 
 	LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
