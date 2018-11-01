@@ -82,8 +82,6 @@
 		}else q = 0;
 		j++;
 	}else j = 0;
-	//LedUpdate();
-	DisplayRequestUpdateLed();
  }
 
  void LedRainbowCycle(void)
@@ -101,8 +99,6 @@
 		}
 		j++;
 	}else j =0;
-	//LedUpdate();
-	DisplayRequestUpdateLed();
  }
 
  void LedRainbow(void) 
@@ -120,8 +116,6 @@
 		}
 		j++;
 	}else j = 0;
-	//LedUpdate();
-	DisplayRequestUpdateLed();
  }
 
  void LedAllColorAnim(uint8_t jump, direction dir)
@@ -143,8 +137,6 @@
 	
 	for(i=0;i<NUM_LEDS;i++)
 		LedSetColorRGB( i, r, g, b);
-	//LedUpdate();
-	DisplayRequestUpdateLed();
  }
 
  static void allColorSetRGB(uint8_t *col1, uint8_t *col2, uint8_t jump)
@@ -163,7 +155,6 @@
 	 WheelPos = 255 - WheelPos;
 	 if(WheelPos < 85)
 	 {
-		 //strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
 		 *red = 255 - WheelPos*3;
 		 *blue = 0;
 		 *green = WheelPos*3;
@@ -174,7 +165,6 @@
 		 *red = 0;
 		 *blue = WheelPos * 3;
 		 *green = WheelPos*3;
-		 //strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
 	 }
 	 else
 	 {
@@ -182,7 +172,6 @@
 		 *red = WheelPos * 3;
 		 *blue = 255 - WheelPos * 3;
 		 *green = 0;
-		 //strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 	 }
  }
 

@@ -257,15 +257,19 @@ void DisplayOtherInfo()
  			break;
  		case 1:
  			LedTheaterChaseRainbow();
+			LedUpdate();
  			break;
  		case 2:
  			LedRainbowCycle();
+			LedUpdate();
  			break;
  		case 3:
  			LedRainbow();
+			LedUpdate();
  			break;
  		case 4:
  			LedAllColorAnim(10, UP);
+			LedUpdate();
  			break;
 		case 5:
 			LedSetColorRGBAllLed(eeprom_read_byte(&eepLedColor[0]),

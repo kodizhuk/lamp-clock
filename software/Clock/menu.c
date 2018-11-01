@@ -343,9 +343,15 @@ void MenuTime()
 
 		/*display number on display*/
 		if (controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
+		{
 			LedAllColorAnim(20,UP);
+			LedUpdate();
+		}
 		else if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
+		{
 			LedAllColorAnim(20,DOWN);
+			LedUpdate();
+		}
 		else if (controlState == PRESS_CENTER)
 		{
 			LedReadColor(0, &r, &g, &b);
@@ -404,15 +410,19 @@ void MenuLedAnimation()
 					break;
 				case 1:
 					LedTheaterChaseRainbow();
+					LedUpdate();
 					break;
 				case 2:
 					LedRainbowCycle();
+					LedUpdate();
 					break;
 				case 3:
 					LedRainbow();
+					LedUpdate();
 					break;
 				case 4:
 					LedAllColorAnim(10, UP);
+					LedUpdate();
 					break;
 				default:
 					break;
