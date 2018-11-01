@@ -275,7 +275,7 @@ void DisplayOtherInfo()
 			LedSetColorRGBAllLed(eeprom_read_byte(&eepLedColor[0]),
 								eeprom_read_byte(&eepLedColor[1]),
 								eeprom_read_byte(&eepLedColor[2]));
-			DisplayRequestUpdateLed();
+			LedUpdate();
 			break;
  		default:
  			break;

@@ -49,12 +49,6 @@ ISR(TIMER2_COMP_vect)
 	
 	if(++currentNum == NUM_DIGIT)
 		currentNum = 0;
-		
-	if(ledAnimationRequest)
-	{
-		LedUpdate();
-		ledAnimationRequest = 0;
-	}
 }
 
 ISR(TIMER2_OVF_vect)		//every 2ms
