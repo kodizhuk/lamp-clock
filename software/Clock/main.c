@@ -151,6 +151,7 @@ void Loading(void)
 	DisplayClear();
 	DisplaySetData3Num(dataToDisplay);
 	LedOffAll();
+	LedUpdate();
 	_delay_ms(300);
 	for(i = 0; i < 6; i++)
 	{
@@ -252,6 +253,7 @@ void DisplayOtherInfo()
  	{
  		case 0:
  			LedOffAll();
+			LedUpdate();
  			break;
  		case 1:
  			LedTheaterChaseRainbow();
@@ -298,6 +300,7 @@ void RestoreSettingsFromEeprom()
 	uint8_t i;
 
 	LedOffAll();
+	LedUpdate();
 
 	/*restore all settings from eeprom*/
 	//eeprom_write_byte(&eepIsExist,0xFF);		//check default

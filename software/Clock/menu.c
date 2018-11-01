@@ -77,7 +77,8 @@ uint8_t StartMenu(void)
 		_delay_ms(100);
 		DisplaySetBlinkDigit(digitBlink);
 
-		LedOffAll();																	//enable led only "select menu" digit
+		LedOffAll();
+		LedUpdate();																	//enable led only "select menu" digit
 		LedSetColor(selectMenu, colorBacklightChoice);
 		for(i = 4; i < 6; i++)
 			DisplayRequestUpdateLed();
@@ -97,6 +98,7 @@ uint8_t StartMenu(void)
 				DisplaySetBlinkDigit(digitBlink);
 
 				LedOffAll();
+				LedUpdate();
 				LedSetColor(selectMenu, colorBacklightChoice);
 				DisplayRequestUpdateLed();
 				_delay_ms(100);
@@ -113,6 +115,7 @@ uint8_t StartMenu(void)
 				DisplaySetBlinkDigit(digitBlink);
 
 				LedOffAll();
+				LedUpdate();
 				LedSetColor(selectMenu, colorBacklightChoice);
 				DisplayRequestUpdateLed();
 				_delay_ms(100);
@@ -197,6 +200,7 @@ void MenuTime()
 	DisplaySetBlinkDigit(digitBlink);
 
 	LedOffAll();
+	LedUpdate();
 	for(i=0; i<2; i++)
 		LedSetColor(i, colorBacklightChoice);
 	DisplayRequestUpdateLed();
@@ -281,6 +285,7 @@ void MenuTime()
 
 				/*set led backlighting and digit brightness*/
 				LedOffAll();
+				LedUpdate();
 				for(i=0;i<NUM_DIGIT;i++)						//set minimum brightness for all digit
 				{
 					digitBrightness[i] = lowDigitBrightness;
@@ -320,6 +325,7 @@ void MenuTime()
 	uint8_t r, g, b;
 	DisplayClear();
 	LedOffAll();
+	LedUpdate();
 
 	LedSetBrigtness(LED_MAX_BRIGHTNESS);
 
@@ -365,6 +371,7 @@ void MenuLedAnimation()
 	uint8_t currentSettings = 0;
 
 	LedOffAll();
+	LedUpdate();
 	LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
 	for(i=0; i<6; i++)
 		LedSetColor(i, colorBacklightChoice);
@@ -393,6 +400,7 @@ void MenuLedAnimation()
 			{
 				case 0:
 					LedOffAll();
+					LedUpdate();
 					break;
 				case 1:
 					LedTheaterChaseRainbow();
