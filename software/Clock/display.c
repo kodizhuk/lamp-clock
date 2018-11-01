@@ -109,18 +109,18 @@ void DisplayInit(void)
 	DisplaySetBrightness100(100);
 	
 	/*init pins*/
-	DDRB |= (1<<PB2) | (1<<PB3) | (1<<PB4) | (1<<PB5);
-	DDRC |= (1<<PB0) |(1<<PB1) |(1<<PB2) |(1<<PB3) |(1<<PB4) |(1<<PB5);
+	DDRB |= (1 << PB2) | (1 << PB3) | (1 << PB4) | (1 << PB5);
+	DDRC |= (1 << PB0) | (1 << PB1) | (1 << PB2) | (1 << PB3) | (1 << PB4) | (1 << PB5);
 	
 	/*init timer*/
 	TCCR2 |= (1 << CS22);		//preskaler clk/64 (8bit timer_2)
-	TIMSK |= (1<<OCIE2) | (1<<TOIE2);		//timer_2 overflow and compare match enable, period 
+	TIMSK |= (1 << OCIE2) | (1 << TOIE2);		//timer_2 overflow and compare match enable, period 
 }
 
 void DisplaySetData6Num(uint8_t number[] )
 {
 	uint8_t i;
-	for(i=0; i<NUM_DIGIT;i++)
+	for(i = 0; i < NUM_DIGIT; i++)
 	{
 		if(number[i] >= OFF_NUMB)
 			data[i].newData = 10;
@@ -131,8 +131,8 @@ void DisplaySetData6Num(uint8_t number[] )
 
 void DisplaySetData3Num(uint8_t number[] )
 {
-	uint8_t i,j;
-	for(i=0,j=0; i<NUM_DIGIT;i+=2,j++)
+	uint8_t i, j;
+	for(i = 0, j = 0; i < NUM_DIGIT; i += 2, j++)
 	{		
 		/*new information*/
 		if(number[j] >= OFF_NUMB)
@@ -142,8 +142,8 @@ void DisplaySetData3Num(uint8_t number[] )
 		}
 		else
 		{
-			data[i].newData = number[j]/10;
-			data[i+1].newData = number[j]%10;
+			data[i].newData = number[j] / 10;
+			data[i+1].newData = number[j] % 10;
 		}
 	}
 }
@@ -169,13 +169,13 @@ void DisplaySetBrightness(uint8_t brightness)
 	if(brightness < MIN_BRIGHTNESS_DIGIT)
 		brightness = MIN_BRIGHTNESS_DIGIT;
 
-	for (numDigit=0;numDigit<NUM_DIGIT;numDigit++)
+	for (numDigit = 0; numDigit < NUM_DIGIT; numDigit++)
 	{
 		//zoom to new max value
-		for(i=0 ;i<BRIGHT_NUM_LEVEL; i++)
-			brightLevel[i][numDigit] = ((uint32_t)(brightConstLevel[i]*brightness))/255+(255-brightness);
+		for(i = 0; i < BRIGHT_NUM_LEVEL; i++)
+			brightLevel[i][numDigit] = ((uint32_t)(brightConstLevel[i] * brightness)) / 255 + (255 - brightness);
 		
- 		data[numDigit].dataBrightness = 255-brightness;		//update
+ 		data[numDigit].dataBrightness = 255 - brightness;		//update
 	}		
 }
 
@@ -188,7 +188,7 @@ void DisplaySetBrightness100(uint8_t brightness)
 	uint8_t tmp = brightness;
 	if(tmp >= 100)
 		tmp = 99;
-	tmp = (uint32_t)(tmp*256)/100;
+	tmp = (uint32_t)(tmp * 256) / 100;
 	DisplaySetBrightness(tmp);
 }
 
@@ -200,13 +200,13 @@ void DisplaySetBrightnessEachNumber(uint8_t brightness[])
 {
 	uint8_t i, numDigit;
 
-	for (numDigit=0;numDigit<NUM_DIGIT;numDigit++)
+	for (numDigit = 0; numDigit < NUM_DIGIT; numDigit++)
 	{
 		if(brightness[numDigit] < MIN_BRIGHTNESS_DIGIT)
 			brightness[numDigit] = MIN_BRIGHTNESS_DIGIT;
 			
-		for(i=0 ;i<BRIGHT_NUM_LEVEL; i++)
-			brightLevel[i][numDigit] = ((uint32_t)(brightConstLevel[i]*brightness[numDigit]))/255+(255-brightness[numDigit]);
+		for(i = 0; i < BRIGHT_NUM_LEVEL; i++)
+			brightLevel[i][numDigit] = ((uint32_t)(brightConstLevel[i] * brightness[numDigit])) / 255 + (255 - brightness[numDigit]);
 
 		data[numDigit].dataBrightness = 255- brightness[numDigit];
 	}		
@@ -216,12 +216,12 @@ void DisplaySetBrightnessEachNumber(uint8_t brightness[])
 void DisplaySetBrightnessEachNumber100(uint8_t brightness[])
 {
 	uint8_t i, tmp[NUM_DIGIT];
-	for(i=0;i<NUM_DIGIT;i++)
+	for(i = 0; i < NUM_DIGIT; i++)
 	{
 		tmp[i] = brightness[i];
 		if(tmp[i] >= 100)
 		tmp[i] = 99;
-		tmp[i] = (uint32_t)(tmp[i]*256)/100;
+		tmp[i] = (uint32_t)(tmp[i] * 256) / 100;
 	}
 	DisplaySetBrightnessEachNumber(tmp);
 }
@@ -231,8 +231,8 @@ void DisplayReadBrightnessEachNumber(uint8_t brightness[])
 {
 	uint8_t numDigit;
 
-	for (numDigit=0;numDigit<NUM_DIGIT;numDigit++)
-		brightness[numDigit] = 255-brightLevel[0][NUM_DIGIT-numDigit-1];
+	for (numDigit = 0; numDigit < NUM_DIGIT; numDigit++)
+		brightness[numDigit] = 255 - brightLevel[0][NUM_DIGIT - numDigit - 1];
 }
 
 /*1-blink, 0 - static light
@@ -241,7 +241,7 @@ void DisplayReadBrightnessEachNumber(uint8_t brightness[])
 void DisplaySetBlinkDigit(uint8_t digitToBlink[])
 {
 	uint8_t i;
-	for(i=0;i<NUM_DIGIT;i++)
+	for(i = 0; i < NUM_DIGIT; i++)
 		blinkDigit[i] = digitToBlink[i];
 }
 
@@ -249,7 +249,7 @@ void DisplayClear(void)
 {
 	uint8_t i;
 
-	for(i=0; i<NUM_DIGIT;i++)
+	for(i = 0; i < NUM_DIGIT; i++)
 		data[i].newData = 10;
 }
 
