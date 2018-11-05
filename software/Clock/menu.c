@@ -18,6 +18,7 @@
  void MenuTime();
  void MenuLedStaticColor();
  void MenuLedAnimation();
+ void MenuDigitAnimation();
 
  extern void RestoreSettingsFromEeprom(void);
 
@@ -149,6 +150,9 @@ uint8_t StartMenu(void)
 				controlState = PRESS_CENTER;
 				break;
 			case 3:	
+				MenuDigitAnimation();
+				selectMenu = 5;
+				controlState = PRESS_CENTER;
 				break;
 			case 4:
 				break;
@@ -323,7 +327,6 @@ void MenuTime()
 	}
 }
 
-
  void MenuLedStaticColor()
  {
 	controlState = NO_PRESS;
@@ -479,5 +482,56 @@ void MenuLedAnimation()
 				break;
 		}
 		_delay_ms(1);
+	}
+}
+
+void MenuDigitAnimation()
+{
+	uint8_t secondCounter = 0;
+	controlState = NO_PRESS;
+	DisplayClear();
+	LedOffAll();
+	//LedUpdate();
+	DisplayRequestUpdateLed();
+	 
+	dataToDisplay[0] = 0;
+	dataToDisplay[1] = 0;
+	dataToDisplay[2] = 0;
+	DisplaySetData3Num(dataToDisplay);
+	DisplaySetBrightness100(100);
+	 
+	uint8_t digitAnumation = eeprom_read_byte(&eepDisplayAnimation) ? 0 : 1;
+	 
+	DisplaySetAnimation(digitAnumation);
+	 
+	while(controlState != PRESS_CENTER)
+	{
+		controlState = ControlCheck();
+
+		/*display number on display*/
+		if (controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
+		{
+			digitAnumation = digitAnumation ? 0 : 1;
+			DisplaySetAnimation(digitAnumation);
+		}
+		else if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
+		{
+			digitAnumation = digitAnumation ? 0 : 1;
+			DisplaySetAnimation(digitAnumation);
+		}
+		else if (controlState == PRESS_CENTER)
+		{
+			eeprom_write_byte(&eepDisplayAnimation, digitAnumation);	//static color led animation
+		}
+
+		if(++secondCounter >= 10)
+		{
+			secondCounter = 0;
+			if(++dataToDisplay[2] >= 60)
+				dataToDisplay[2] = 0;
+			DisplaySetData3Num(dataToDisplay);
+			
+		}
+		_delay_ms(100);
 	}
 }
