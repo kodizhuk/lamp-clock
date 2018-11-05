@@ -293,6 +293,7 @@ void GotoMenu()
 	{
 		/*MENU*/
 		StartMenu();
+		Loading();
 		controlState = NO_PRESS;
 	}
 
