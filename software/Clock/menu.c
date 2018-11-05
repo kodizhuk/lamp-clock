@@ -78,7 +78,8 @@ uint8_t StartMenu(void)
 		DisplaySetBlinkDigit(digitBlink);
 
 		LedOffAll();
-		LedUpdate();																	//enable led only "select menu" digit
+		//LedUpdate();
+		DisplayRequestUpdateLed();																	//enable led only "select menu" digit
 		LedSetColor(selectMenu, colorBacklightChoice);
 		for(i = 4; i < 6; i++)
 			DisplayRequestUpdateLed();
@@ -98,7 +99,8 @@ uint8_t StartMenu(void)
 				DisplaySetBlinkDigit(digitBlink);
 
 				LedOffAll();
-				LedUpdate();
+				//LedUpdate();
+				DisplayRequestUpdateLed();
 				LedSetColor(selectMenu, colorBacklightChoice);
 				DisplayRequestUpdateLed();
 				_delay_ms(100);
@@ -115,7 +117,8 @@ uint8_t StartMenu(void)
 				DisplaySetBlinkDigit(digitBlink);
 
 				LedOffAll();
-				LedUpdate();
+				//LedUpdate();
+				DisplayRequestUpdateLed();
 				LedSetColor(selectMenu, colorBacklightChoice);
 				DisplayRequestUpdateLed();
 				_delay_ms(100);
@@ -200,7 +203,8 @@ void MenuTime()
 	DisplaySetBlinkDigit(digitBlink);
 
 	LedOffAll();
-	LedUpdate();
+	//LedUpdate();
+	DisplayRequestUpdateLed();
 	for(i=0; i<2; i++)
 		LedSetColor(i, colorBacklightChoice);
 	DisplayRequestUpdateLed();
@@ -285,7 +289,8 @@ void MenuTime()
 
 				/*set led backlighting and digit brightness*/
 				LedOffAll();
-				LedUpdate();
+				//LedUpdate();
+				DisplayRequestUpdateLed();
 				for(i=0;i<NUM_DIGIT;i++)						//set minimum brightness for all digit
 				{
 					digitBrightness[i] = lowDigitBrightness;
@@ -324,14 +329,12 @@ void MenuTime()
 	controlState = NO_PRESS;
 	uint8_t r, g, b;
 	DisplayClear();
-	LedOffAll();
-	LedUpdate();
 
 	LedSetBrigtness(LED_MAX_BRIGHTNESS);
 
 	LedOffAll();
-	LedUpdate();
-
+	//LedUpdate();
+	DisplayRequestUpdateLed();
 	dataToDisplay[0] = 0;
 	dataToDisplay[1] = 0;
 	dataToDisplay[2] = 0;
@@ -345,12 +348,14 @@ void MenuTime()
 		if (controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
 		{
 			LedAllColorAnim(20,UP);
-			LedUpdate();
+			//LedUpdate();
+			DisplayRequestUpdateLed();
 		}
 		else if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
 		{
 			LedAllColorAnim(20,DOWN);
-			LedUpdate();
+			//LedUpdate();
+			DisplayRequestUpdateLed();
 		}
 		else if (controlState == PRESS_CENTER)
 		{
@@ -377,7 +382,8 @@ void MenuLedAnimation()
 	uint8_t currentSettings = 0;
 
 	LedOffAll();
-	LedUpdate();
+	//LedUpdate();
+	DisplayRequestUpdateLed();
 	LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
 	for(i=0; i<6; i++)
 		LedSetColor(i, colorBacklightChoice);
@@ -406,23 +412,28 @@ void MenuLedAnimation()
 			{
 				case 0:
 					LedOffAll();
-					LedUpdate();
+					//LedUpdate();
+					DisplayRequestUpdateLed();
 					break;
 				case 1:
 					LedTheaterChaseRainbow();
-					LedUpdate();
+					//LedUpdate();
+					DisplayRequestUpdateLed();
 					break;
 				case 2:
 					LedRainbowCycle();
-					LedUpdate();
+					//LedUpdate();
+					DisplayRequestUpdateLed();
 					break;
 				case 3:
 					LedRainbow();
-					LedUpdate();
+					//LedUpdate();
+					DisplayRequestUpdateLed();
 					break;
 				case 4:
 					LedAllColorAnim(10, UP);
-					LedUpdate();
+					//LedUpdate();
+					DisplayRequestUpdateLed();
 					break;
 				default:
 					break;
