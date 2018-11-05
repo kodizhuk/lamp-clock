@@ -32,7 +32,7 @@
 
 /*task timer*/
 uint8_t flag[MAX_NUM_OF_TIMERS];
-enum {ACTION1, ACTION2, ACTION3, ACTION4};
+enum {ACTION1, ACTION2, ACTION3, ACTION4, ACTION5};
 volatile static struct
 {
 	uint8_t Number;
@@ -65,6 +65,7 @@ void CheckUpdateTime();
 void VerifyControl();
 void DisplayOtherInfo();
 void GotoMenu();
+void LongTimeFuncs();
 
 void RestoreSettingsFromEeprom();
 
@@ -106,6 +107,7 @@ int main(void)
 		if(flag[ACTION2])VerifyControl();		//check encoder/button
 		if(flag[ACTION3])DisplayOtherInfo();	//display temperature/...
 		if(flag[ACTION4])GotoMenu();			//menu flag
+		if(flag[ACTION5])LongTimeFuncs();		//Led update color
 
 		_delay_us(10);
 	}
@@ -125,7 +127,8 @@ void Init(void)
 	SetTaskTimer(ACTION1,10);
  	SetTaskTimer(ACTION2,10);			
  	SetTaskTimer(ACTION3,100);			//every 100ms
- 	SetTaskTimer(ACTION4,100);			
+ 	SetTaskTimer(ACTION4,100);		
+	SetTaskTimer(ACTION5,1);	
 
 	/*display initialization*/
 	DisplayInit();
@@ -213,11 +216,6 @@ void CheckUpdateTime()
  		if(tmpBright < 20)
  			tmpBright = 20;
  		LedSetBrigtness(tmpBright * 100 / 255);
-// 		DisplaySetBrightness(255);
-		
-//   		dataToDisplay[0] = OFF_NUMB;
-//   		dataToDisplay[1] = tmpBright/100;
-//   		dataToDisplay[2] = tmpBright-dataToDisplay[1]*100;
 	}
 
 	DisplaySetData3Num(dataToDisplay);
@@ -244,38 +242,40 @@ void DisplayOtherInfo()
 {
 	flag[ACTION3] = 0;
 
-	/*при переході з години в дату можна перелічувати всі цифри, виключаючи їх справа наліво
-	*	або просто затухання плавне години, а потім появлення плавне дати 
-	*   або просто зсув вправо/вліво години та аналогічно появлення дати
-	*/
 	/*display animation*/
  	switch (eeprom_read_byte(&eepNumLedAnimation))
  	{
  		case 0:
  			LedOffAll();
-			LedUpdate();
+			//LedUpdate();
+			DisplayRequestUpdateLed();
  			break;
  		case 1:
  			LedTheaterChaseRainbow();
-			LedUpdate();
+			//LedUpdate();
+			DisplayRequestUpdateLed();
  			break;
  		case 2:
  			LedRainbowCycle();
-			LedUpdate();
+			//LedUpdate();
+			DisplayRequestUpdateLed();
  			break;
  		case 3:
  			LedRainbow();
-			LedUpdate();
+			//LedUpdate();
+			DisplayRequestUpdateLed();
  			break;
  		case 4:
  			LedAllColorAnim(10, UP);
-			LedUpdate();
+			//LedUpdate();
+			DisplayRequestUpdateLed();
  			break;
 		case 5:
-			LedSetColorRGBAllLed(eeprom_read_byte(&eepLedColor[0]),
-								eeprom_read_byte(&eepLedColor[1]),
-								eeprom_read_byte(&eepLedColor[2]));
-			LedUpdate();
+ 			LedSetColorRGBAllLed(eeprom_read_byte(&eepLedColor[0]),
+ 								eeprom_read_byte(&eepLedColor[1]),
+ 								eeprom_read_byte(&eepLedColor[2]));
+ 			//LedUpdate();
+ 			DisplayRequestUpdateLed();
 			break;
  		default:
  			break;
@@ -297,6 +297,15 @@ void GotoMenu()
 	}
 
 	SetTaskTimer(ACTION4, 100);
+}
+
+void LongTimeFuncs()
+{
+	flag[ACTION5] = 0;
+
+	//LedUpdate();
+
+	SetTaskTimer(ACTION5, 1);
 }
 
 void RestoreSettingsFromEeprom()

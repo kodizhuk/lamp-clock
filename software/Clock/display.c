@@ -26,7 +26,7 @@ const uint8_t digit[] = {
 		0b001111100		//off all
 };
 //0 - max brightness, 255 min brightness(off digit)	
-const uint8_t brightConstLevel[BRIGHT_NUM_LEVEL]={1,40,70,90,120,150,170,190,210,230,240,250,250,250,240,230,210,190,170,150,120,90,70,40,1};  
+const uint8_t brightConstLevel[BRIGHT_NUM_LEVEL] = {1,40,70,90,120,150,170,190,210,230,240,250,250,250,240,230,210,190,170,150,120,90,70,40,1};  
 uint8_t brightLevel[BRIGHT_NUM_LEVEL][NUM_DIGIT];
 static uint8_t blinkDigit[NUM_DIGIT];		//1-blink, 0 - static light
 
@@ -49,59 +49,72 @@ ISR(TIMER2_COMP_vect)
 	
 	if(++currentNum == NUM_DIGIT)
 		currentNum = 0;
+	
+	//send data to leds	
+	if(ledAnimationRequest && (OCR2 <= 200))
+	{
+		LedUpdate();
+		ledAnimationRequest = 0;
+	}
 }
 
-ISR(TIMER2_OVF_vect)		//every 2ms
+ISR(TIMER2_OVF_vect)
 {	
-		PORTC = 0x00;
+	PORTC = 0x00;
 
-		if(currentAnimation == SHORT_BLINC)
+	if(currentAnimation == SHORT_BLINC)
+	{
+		OCR2 =  data[currentNum].dataBrightness;
+
+		if(blinkDigit[currentNum] || (data[currentNum].brightLevelDigit != 0 ))
 		{
-			OCR2 =  data[currentNum].dataBrightness;
-
-			if(blinkDigit[currentNum] || (data[currentNum].brightLevelDigit != 0 ))
+			if(++data[currentNum].delay == SPEED_BRIGHTNESS)
 			{
-				if(++data[currentNum].delay == SPEED_BRIGHTNESS)
-				{
-					data[currentNum].delay = 0;
+				data[currentNum].delay = 0;
 				
-					data[currentNum].brightLevelDigit++;
-					if(data[currentNum].brightLevelDigit == BRIGHT_NUM_LEVEL)
-					data[currentNum].brightLevelDigit = 0;
+				data[currentNum].brightLevelDigit++;
+				if(data[currentNum].brightLevelDigit == BRIGHT_NUM_LEVEL)
+				data[currentNum].brightLevelDigit = 0;
 				
-					if((data[currentNum].brightLevelDigit) > BRIGHT_NUM_LEVEL/2)
-					data[currentNum].outData = data[currentNum].newData;		//display new digit
+				if((data[currentNum].brightLevelDigit) > BRIGHT_NUM_LEVEL/2)
+				data[currentNum].outData = data[currentNum].newData;		//display new digit
 				
-					data[currentNum].dataBrightness = brightLevel[data[currentNum].brightLevelDigit][currentNum];	//set brightness to digit
-				}
-			}else if((data[currentNum].outData != data[currentNum].newData))
-			{
-				data[currentNum].outData = data[currentNum].newData;
+				data[currentNum].dataBrightness = brightLevel[data[currentNum].brightLevelDigit][currentNum];	//set brightness to digit
 			}
+		}else if((data[currentNum].outData != data[currentNum].newData))
+		{
+			data[currentNum].outData = data[currentNum].newData;
 		}
-		else if(currentAnimation == LONG_BLINC)
-		{			
-			OCR2 = data[currentNum].dataBrightness ;
+	}
+	else if(currentAnimation == LONG_BLINC)
+	{			
+		OCR2 = data[currentNum].dataBrightness ;
 
-			/*new digit on display*/
-			if((data[currentNum].outData != data[currentNum].newData) || (data[currentNum].brightLevelDigit != 0 ))
+		/*new digit on display*/
+		if((data[currentNum].outData != data[currentNum].newData) || (data[currentNum].brightLevelDigit != 0 ))
+		{
+			if(++data[currentNum].delay == SPEED_BRIGHTNESS)
 			{
-				if(++data[currentNum].delay == SPEED_BRIGHTNESS)
-				{
-					data[currentNum].delay = 0;
+				data[currentNum].delay = 0;
 			
-					data[currentNum].brightLevelDigit++;
-					if(data[currentNum].brightLevelDigit == BRIGHT_NUM_LEVEL)
-						data[currentNum].brightLevelDigit = 0;
+				data[currentNum].brightLevelDigit++;
+				if(data[currentNum].brightLevelDigit == BRIGHT_NUM_LEVEL)
+					data[currentNum].brightLevelDigit = 0;
 					
-					if((data[currentNum].brightLevelDigit) > BRIGHT_NUM_LEVEL/2)
-						data[currentNum].outData = data[currentNum].newData;		//display new digit 
+				if((data[currentNum].brightLevelDigit) > BRIGHT_NUM_LEVEL/2)
+					data[currentNum].outData = data[currentNum].newData;		//display new digit 
 				
-					data[currentNum].dataBrightness = brightLevel[data[currentNum].brightLevelDigit][currentNum];	//set brightness to digit
-				}
+				data[currentNum].dataBrightness = brightLevel[data[currentNum].brightLevelDigit][currentNum];	//set brightness to digit
 			}
-
 		}
+	}
+	
+	//send data to leds
+	if(ledAnimationRequest && (OCR2 >= 50))
+	{
+		LedUpdate();
+		ledAnimationRequest = 0;
+	}
 }
 
 void DisplayInit(void)
