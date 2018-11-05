@@ -339,6 +339,7 @@ void MenuTime()
 	dataToDisplay[1] = 0;
 	dataToDisplay[2] = 0;
 	DisplaySetData3Num(dataToDisplay);
+	DisplaySetBrightness100(100);
 	
 	//set first color
 	LedAllColorAnim(20, DOWN);
