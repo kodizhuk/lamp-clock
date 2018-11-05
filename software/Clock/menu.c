@@ -339,6 +339,11 @@ void MenuTime()
 	dataToDisplay[1] = 0;
 	dataToDisplay[2] = 0;
 	DisplaySetData3Num(dataToDisplay);
+	
+	//set first color
+	LedAllColorAnim(20, DOWN);
+	//LedUpdate();
+	DisplayRequestUpdateLed();
 
 	while(controlState != PRESS_CENTER)
 	{
@@ -347,13 +352,13 @@ void MenuTime()
 		/*display number on display*/
 		if (controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
 		{
-			LedAllColorAnim(20,UP);
+			LedAllColorAnim(20, UP);
 			//LedUpdate();
 			DisplayRequestUpdateLed();
 		}
 		else if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
 		{
-			LedAllColorAnim(20,DOWN);
+			LedAllColorAnim(20, DOWN);
 			//LedUpdate();
 			DisplayRequestUpdateLed();
 		}
