@@ -181,8 +181,17 @@
  */
  void LedSetBrigtness(uint8_t bright)
  {
-	if(bright <= LED_MAX_BRIGHTNESS) brigtness = bright;
-	else brigtness = LED_MAX_BRIGHTNESS;
+	bright *= 2;
+	if(bright > 255)
+		bright = 255;
+	if(bright < 20)
+		bright = 20;
+	bright = bright * 100 / 255;
+	
+	if(bright <= LED_MAX_BRIGHTNESS) 
+		brigtness = bright;
+	else 
+		brigtness = LED_MAX_BRIGHTNESS;
  }
 
  uint8_t LedReadBrigtness()

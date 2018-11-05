@@ -208,14 +208,7 @@ void CheckUpdateTime()
 		rtc_get_time(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
 
 		/*change brightness*/
- 		uint16_t tmpBright;
- 		tmpBright = BrightnessGet();
- 		tmpBright *= 2;
- 		if(tmpBright > 255)
- 			tmpBright = 255;
- 		if(tmpBright < 20)
- 			tmpBright = 20;
- 		LedSetBrigtness(tmpBright * 100 / 255);
+ 		LedSetBrigtness(BrightnessGet());
 	}
 
 	DisplaySetData3Num(dataToDisplay);
@@ -294,6 +287,10 @@ void GotoMenu()
 		/*MENU*/
 		StartMenu();
 		Loading();
+		
+		/*change brightness*/
+		LedSetBrigtness(BrightnessGet());
+		
 		controlState = NO_PRESS;
 	}
 
@@ -333,7 +330,7 @@ void RestoreSettingsFromEeprom()
 		eeprom_write_byte(&eepIsExist, 0x00);
 	}
 
-	LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
+	//LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
 	DisplaySetBrightness100(eeprom_read_byte(&eepBrightnessDigitMax));
 	numLedAnimation = eeprom_read_byte(&eepNumLedAnimation);
 	if(numLedAnimation == 5)
@@ -348,4 +345,6 @@ void RestoreSettingsFromEeprom()
 		DisplaySetAnimation(LONG_BLINC);
 	else
 		DisplaySetAnimation(SHORT_BLINC);
+		
+	LedSetBrigtness(BrightnessGet());
 }
