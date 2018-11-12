@@ -14,6 +14,8 @@
  #include "i2c.h"
  #include "control.h"
  #include "ledLight.h"
+ 
+ #define TIME_TO_AUTOEXIT	10000	//ms
 
  void MenuTime();
  void MenuLedStaticColor();
@@ -44,11 +46,13 @@ uint8_t colorBacklightChoice[] = {255,0,0};
 uint8_t digitBrightness[6], digitBlink[6];
 uint8_t highDigitBrigtness, lowDigitBrightness;
 uint8_t color[3];
+uint16_t autoExitMs;
 
 uint8_t StartMenu(void)
 {
 	uint8_t mainMenu[] = {1, 2, 3, 4, 5, 6};
 	uint8_t selectMenu = 0;
+	autoExitMs = 0;
 
 	/*save led color, led brightness, digit brightness, number led animation, digit animation, display animation*/
 	uint8_t i;
@@ -85,10 +89,11 @@ uint8_t StartMenu(void)
 		for(i = 4; i < 6; i++)
 			DisplayRequestUpdateLed();
 
-		while((controlState=ControlCheck()) != PRESS_CENTER)
+		while(((controlState = ControlCheck()) != PRESS_CENTER) && autoExitMs <= TIME_TO_AUTOEXIT)
 		{
 			if(controlState == PRESS_R || controlState == PRESSED_R)
 			{
+				autoExitMs = 0;
 				digitBrightness[selectMenu] = lowDigitBrightness;
 				digitBlink[selectMenu] = 0;
 
@@ -106,6 +111,7 @@ uint8_t StartMenu(void)
 			}
 			if (controlState == PRESS_L || controlState == PRESSED_L)
 			{
+				autoExitMs = 0;
 				digitBrightness[selectMenu] = lowDigitBrightness;
 				digitBlink[selectMenu] = 0;
 				if (--selectMenu > NUM_DIGIT)
@@ -120,12 +126,16 @@ uint8_t StartMenu(void)
 				DisplayRequestUpdateLed();
 				_delay_ms(100);
 			}
-
+			
 			_delay_ms(1);
+			autoExitMs++;
 		}
 		
 		digitBlink[selectMenu] = 0;			// off digit blink
-		DisplaySetBlinkDigit(digitBlink);	//
+		DisplaySetBlinkDigit(digitBlink);	
+		
+		if(autoExitMs >= TIME_TO_AUTOEXIT)
+			selectMenu = 5;
 
 		/*choice  menu*/
 		switch(selectMenu)
@@ -171,10 +181,11 @@ void MenuTime()
 	uint8_t null;
 	uint8_t pressedDelay = 0;
 	uint8_t SPEED_CHANGE_IN_PRESSED = 150;
+	autoExitMs = 0;
 
 	enum {HOUR, MIN, DATE, MONTH, YEAR, EXIT};
-	const uint8_t maxDataValue[5] = {23,59,31,12,99};		//HOUR, MIN, DATE, MONTH, YEAR
-	const uint8_t minDataValue[5] = {0,0,1,1,0};			//HOUR, MIN, DATE, MONTH, YEAR
+	const uint8_t maxDataValue[5] = {23, 59, 31, 12, 99};		//HOUR, MIN, DATE, MONTH, YEAR
+	const uint8_t minDataValue[5] = {0, 0, 1, 1, 0};			//HOUR, MIN, DATE, MONTH, YEAR
 	uint8_t currentSettings = HOUR;
 
 	DisplayClear();
@@ -184,13 +195,13 @@ void MenuTime()
 	else
 		highDigitBrigtness = eeprom_read_byte(&eepBrightnessDigitMin);
 
-	lowDigitBrightness = highDigitBrigtness/8;
+	lowDigitBrightness = highDigitBrigtness / 8;
 
 	digitBrightness[0] = highDigitBrigtness;
 	digitBrightness[1] = highDigitBrigtness;
 	digitBlink[0] = 0;
 	digitBlink[1] = 0;
-	for(i=2;i<NUM_DIGIT;i++)
+	for(i = 2; i < NUM_DIGIT; i++)
 	{
 		digitBrightness[i] = lowDigitBrightness;
 		digitBlink[i] = 0;
@@ -205,16 +216,16 @@ void MenuTime()
 	LedOffAll();
 	//LedUpdate();
 	DisplayRequestUpdateLed();
-	for(i=0; i<2; i++)
+	for(i = 0; i < 2; i++)
 		LedSetColor(i, colorBacklightChoice);
 	DisplayRequestUpdateLed();
 
-	while(currentSettings != EXIT)
+	while(currentSettings != EXIT && autoExitMs <= TIME_TO_AUTOEXIT)
 	{
 		controlState = ControlCheck();
 
 		/*update time*/
-		if(rtc_check_sqw() && (currentSettings==HOUR || currentSettings==MIN))
+		if(rtc_check_sqw() && (currentSettings == HOUR || currentSettings == MIN))
 		{
 			rtc_get_time(&null, &null, &dataToDisplay[2]);
 			DisplaySetData3Num(dataToDisplay);
@@ -222,14 +233,16 @@ void MenuTime()
 
 		if(controlState == PRESS_R || controlState == PRESSED_R)
 		{
-			if(controlState == PRESS_R || pressedDelay >SPEED_CHANGE_IN_PRESSED)
+			autoExitMs = 0;
+			if(controlState == PRESS_R || pressedDelay > SPEED_CHANGE_IN_PRESSED)
 			{
-				if(currentSettings!=YEAR){
+				if(currentSettings!=YEAR)
+				{
 					if((++dataToDisplay[currentSettings%2]) > maxDataValue[currentSettings])
 						dataToDisplay[currentSettings%2] = minDataValue[currentSettings];
 				}
 				else{
-					if((++dataToDisplay[2])>maxDataValue[currentSettings])
+					if((++dataToDisplay[2]) > maxDataValue[currentSettings])
 						dataToDisplay[2] = minDataValue[currentSettings];
 				}
 				DisplaySetData3Num(dataToDisplay);
@@ -239,12 +252,13 @@ void MenuTime()
 		}else 
 		if(controlState == PRESS_L || controlState == PRESSED_L)
 		{
-			if(controlState == PRESS_L || pressedDelay >SPEED_CHANGE_IN_PRESSED)
+			autoExitMs = 0;
+			if(controlState == PRESS_L || pressedDelay > SPEED_CHANGE_IN_PRESSED)
 			{
 				if(currentSettings!=YEAR){
 					if((--dataToDisplay[currentSettings%2]) > maxDataValue[currentSettings])
 						dataToDisplay[currentSettings%2] = maxDataValue[currentSettings];
-					if(currentSettings==DATE || currentSettings==MONTH)
+					if(currentSettings == DATE || currentSettings == MONTH)
 						if(dataToDisplay[currentSettings%2]<minDataValue[currentSettings])
 							dataToDisplay[currentSettings%2] = maxDataValue[currentSettings];
 				}
@@ -259,72 +273,71 @@ void MenuTime()
 		}else
 		if(controlState == PRESS_CENTER)
 		{
-				currentSettings++;
+			autoExitMs = 0;
+			currentSettings++;
 
-				/*save time*/
-				if (currentSettings==DATE)
-					rtc_set_time(dataToDisplay[0], dataToDisplay[1], dataToDisplay[2]);
-				/*save date*/
-				if(currentSettings == YEAR)
-					rtc_set_date(dataToDisplay[0], dataToDisplay[1], dataToDisplay[2]);
-				if(currentSettings == EXIT)
-				{
-					uint8_t tmpYear = dataToDisplay[2];
-					rtc_get_date(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
-					rtc_set_date(dataToDisplay[0], dataToDisplay[1], tmpYear);
-				}
+			/*save time*/
+			if (currentSettings == DATE)
+				rtc_set_time(dataToDisplay[0], dataToDisplay[1], dataToDisplay[2]);
+			/*save date*/
+			if(currentSettings == YEAR)
+				rtc_set_date(dataToDisplay[0], dataToDisplay[1], dataToDisplay[2]);
+			if(currentSettings == EXIT)
+			{
+				uint8_t tmpYear = dataToDisplay[2];
+				rtc_get_date(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
+				rtc_set_date(dataToDisplay[0], dataToDisplay[1], tmpYear);
+			}
 
-				/*off time and display data*/
-				if(currentSettings >=DATE)
+			/*off time and display data*/
+			if(currentSettings >= DATE)
+			{
+				if(currentSettings == DATE)
+				rtc_get_date(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
+				if(currentSettings == YEAR)		//year in format __ 20 18
 				{
-					if(currentSettings == DATE)
-					rtc_get_date(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
-					if(currentSettings == YEAR)		//year in format __ 20 18
-					{
-						dataToDisplay[0] = OFF_NUMB;
-						dataToDisplay[1] = 20;
-					}
-					DisplaySetData3Num(dataToDisplay);
+					dataToDisplay[0] = OFF_NUMB;
+					dataToDisplay[1] = 20;
 				}
+				DisplaySetData3Num(dataToDisplay);
+			}
 
-				/*set led backlighting and digit brightness*/
-				LedOffAll();
-				//LedUpdate();
-				DisplayRequestUpdateLed();
-				for(i=0;i<NUM_DIGIT;i++)						//set minimum brightness for all digit
+			/*set led backlighting and digit brightness*/
+			LedOffAll();
+			//LedUpdate();
+			DisplayRequestUpdateLed();
+			for(i = 0; i < NUM_DIGIT; i++)						//set minimum brightness for all digit
+			{
+				digitBrightness[i] = lowDigitBrightness;
+			}
+			if(currentSettings != YEAR)
+			{
+				LedSetColor((currentSettings%2)*2, colorBacklightChoice);
+				LedSetColor((currentSettings%2)*2+1, colorBacklightChoice);
+				digitBrightness[(currentSettings%2)*2] = highDigitBrigtness;
+				digitBrightness[(currentSettings%2)*2+1] = highDigitBrigtness;
+			}
+			else
+			{
+				for (i = 2; i < NUM_DIGIT; i++)
 				{
-					digitBrightness[i] = lowDigitBrightness;
-					//digitBlink[i] = 0;
+					LedSetColor(i, colorBacklightChoice);
+					digitBrightness[i] = highDigitBrigtness;
 				}
-				if(currentSettings != YEAR)
-				{
-					LedSetColor((currentSettings%2)*2, colorBacklightChoice);
-					LedSetColor((currentSettings%2)*2+1, colorBacklightChoice);
-					digitBrightness[(currentSettings%2)*2] = highDigitBrigtness;
-					digitBrightness[(currentSettings%2)*2+1] = highDigitBrigtness;
-					//digitBlink[(currentSettings%2)*2] = 1;
-					//digitBlink[(currentSettings%2)*2+1] = 1;
-				}
-				else
-				{
-					for (i=2;i<NUM_DIGIT;i++)
-					{
-						LedSetColor(i, colorBacklightChoice);
-						digitBrightness[i] = highDigitBrigtness;
-						//digitBlink[i] = 1;
-					}
-				}
-				DisplayRequestUpdateLed();
-				DisplaySetBrightnessEachNumber100(digitBrightness);
-				DisplaySetBlinkDigit(digitBlink);
+			}
+			DisplayRequestUpdateLed();
+			DisplaySetBrightnessEachNumber100(digitBrightness);
+			DisplaySetBlinkDigit(digitBlink);
 		}
 		
 		_delay_ms(1);
+		autoExitMs++;
 	}
 }
 
  void MenuLedStaticColor()
  {
+	autoExitMs = 0;
 	controlState = NO_PRESS;
 	uint8_t r, g, b;
 	DisplayClear();
@@ -345,19 +358,21 @@ void MenuTime()
 	//LedUpdate();
 	DisplayRequestUpdateLed();
 
-	while(controlState != PRESS_CENTER)
+	while(controlState != PRESS_CENTER && autoExitMs <= TIME_TO_AUTOEXIT)
 	{
 		controlState = ControlCheck();
 
 		/*display number on display*/
 		if (controlState == PRESS_R || controlState == PRESSED_R)
 		{
+			autoExitMs = 0;
 			LedAllColorAnim(20, UP);
 			//LedUpdate();
 			DisplayRequestUpdateLed();
 		}
 		else if(controlState == PRESS_L || controlState == PRESSED_L)
 		{
+			autoExitMs = 0;
 			LedAllColorAnim(20, DOWN);
 			//LedUpdate();
 			DisplayRequestUpdateLed();
@@ -372,41 +387,38 @@ void MenuTime()
 		}
 
 		_delay_ms(100);
+		autoExitMs += 100;
 	}
  }
 
 void MenuLedAnimation()
 {
-	/**/
+	autoExitMs = 0;
 	uint8_t i;
 	uint8_t animationUpdateCounter = 0;
 
 	enum {INPUT, EXIT};
 
 	uint8_t tmpAnimation = 4;			//default animation
-	uint8_t currentSettings = 0;
+	uint8_t currentSettings = INPUT;
 
 	LedOffAll();
 	//LedUpdate();
 	DisplayRequestUpdateLed();
-	LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
-	for(i=0; i<6; i++)
-		LedSetColor(i, colorBacklightChoice);
-	DisplayRequestUpdateLed();
+	LedSetBrigtness(LED_MAX_BRIGHTNESS);
 
 	digitBlink[5] = 1;
-	for(i=0;i<NUM_DIGIT-1;i++)														
+	for(i = 0; i < NUM_DIGIT-1; i++)														
 		digitBlink[i] = 0;
 	DisplaySetBlinkDigit(digitBlink);
 
-	uint8_t numberToDisplay[6] = {OFF_NUMB,OFF_NUMB,OFF_NUMB,OFF_NUMB,OFF_NUMB,OFF_NUMB};
-	/*денний чи нічний режим*/
-	DisplaySetBrightness100(eeprom_read_byte(&eepBrightnessDigitMax));
+	dataToDisplay[0] = OFF_NUMB;
+	dataToDisplay[1] = OFF_NUMB;
+	dataToDisplay[2] = tmpAnimation;
+	DisplaySetBrightness100(100);
+	DisplaySetData3Num(dataToDisplay);		//display current animation
 
-	numberToDisplay[5] = tmpAnimation;
-	DisplaySetData6Num(numberToDisplay);		//display current animation
-
-	while(currentSettings != EXIT)
+	while(currentSettings != EXIT && autoExitMs <= TIME_TO_AUTOEXIT)
 	{
 		controlState = ControlCheck();
 
@@ -450,34 +462,36 @@ void MenuLedAnimation()
 		switch(controlState)
 		{
 			case PRESS_R:
+				autoExitMs = 0;
 				tmpAnimation++;
 
 				if(tmpAnimation == 5)
 					tmpAnimation = 0;
 
-				numberToDisplay[5] = tmpAnimation;
-				DisplaySetData6Num(numberToDisplay);
+				dataToDisplay[2] = tmpAnimation;
+				DisplaySetData3Num(dataToDisplay);
 				break;
 			case PRESS_L:
+				autoExitMs = 0;
 				tmpAnimation--;
 
 				if(tmpAnimation >= 5)
 					tmpAnimation = 4;
 
-				numberToDisplay[5] = tmpAnimation;
-				DisplaySetData6Num(numberToDisplay);
+				dataToDisplay[2] = tmpAnimation;
+				DisplaySetData3Num(dataToDisplay);
 				break;
 			case PRESS_CENTER:
-				currentSettings++;		//exit
+				currentSettings = EXIT;		//exit
 
 				/*save settings*/
 				eeprom_write_byte(&eepNumLedAnimation, tmpAnimation);
 				break;
 			default:
-				/*if delay xx min - exit from menu*/
 				break;
 		}
 		_delay_ms(1);
+		autoExitMs++;
 	}
 }
 
