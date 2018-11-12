@@ -22,14 +22,14 @@ control_result ControlCheck()
 {
 	result = NO_PRESS;
 	//first
-	if(bit_is_clear(PIND, BTN0))
+	if(bit_is_clear(PIND, BTN1))
 	{
 		if(permissNextClick[0])
 		{
-			result = PRESS_LEFT;
+			result = PRESS_L;
 			permissNextClick[0] = 0;
 		}else
-		result = PRESSED_LEFT;
+		result = PRESSED_L;
 	}else
 	{
 		permissNextClick[0] = 1;
@@ -48,14 +48,14 @@ control_result ControlCheck()
 		permissNextClick[1] = 1;
 	}
 	//third
-	if(bit_is_clear(PIND, BTN1))
+	if(bit_is_clear(PIND, BTN0))
 	{
 		if(permissNextClick[2])
 		{
-			result = PRESS_RIGHT;
+			result = PRESS_R;
 			permissNextClick[2] = 0;
 		}else
-		result = PRESSED_RIGHT;
+		result = PRESSED_R;
 	}else
 	{
 		permissNextClick[2] = 1;

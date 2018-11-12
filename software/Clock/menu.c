@@ -87,7 +87,7 @@ uint8_t StartMenu(void)
 
 		while((controlState=ControlCheck()) != PRESS_CENTER)
 		{
-			if(controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
+			if(controlState == PRESS_R || controlState == PRESSED_R)
 			{
 				digitBrightness[selectMenu] = lowDigitBrightness;
 				digitBlink[selectMenu] = 0;
@@ -106,7 +106,7 @@ uint8_t StartMenu(void)
 				DisplayRequestUpdateLed();
 				_delay_ms(100);
 			}
-			if (controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
+			if (controlState == PRESS_L || controlState == PRESSED_L)
 			{
 				digitBrightness[selectMenu] = lowDigitBrightness;
 				digitBlink[selectMenu] = 0;
@@ -224,9 +224,9 @@ void MenuTime()
 			DisplaySetData3Num(dataToDisplay);
 		}
 
-		if(controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
+		if(controlState == PRESS_R || controlState == PRESSED_R)
 		{
-			if(controlState == PRESS_LEFT || pressedDelay >SPEED_CHANGE_IN_PRESSED)
+			if(controlState == PRESS_R || pressedDelay >SPEED_CHANGE_IN_PRESSED)
 			{
 				if(currentSettings!=YEAR){
 					if((++dataToDisplay[currentSettings%2]) > maxDataValue[currentSettings])
@@ -241,9 +241,9 @@ void MenuTime()
 			}else
 				pressedDelay++;
 		}else 
-		if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
+		if(controlState == PRESS_L || controlState == PRESSED_L)
 		{
-			if(controlState == PRESS_RIGHT || pressedDelay >SPEED_CHANGE_IN_PRESSED)
+			if(controlState == PRESS_L || pressedDelay >SPEED_CHANGE_IN_PRESSED)
 			{
 				if(currentSettings!=YEAR){
 					if((--dataToDisplay[currentSettings%2]) > maxDataValue[currentSettings])
@@ -354,13 +354,13 @@ void MenuTime()
 		controlState = ControlCheck();
 
 		/*display number on display*/
-		if (controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
+		if (controlState == PRESS_R || controlState == PRESSED_R)
 		{
 			LedAllColorAnim(20, UP);
 			//LedUpdate();
 			DisplayRequestUpdateLed();
 		}
-		else if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
+		else if(controlState == PRESS_L || controlState == PRESSED_L)
 		{
 			LedAllColorAnim(20, DOWN);
 			//LedUpdate();
@@ -453,7 +453,7 @@ void MenuLedAnimation()
 		/*display number on display*/
 		switch(controlState)
 		{
-			case PRESS_LEFT:
+			case PRESS_R:
 				tmpAnimation++;
 
 				if(tmpAnimation == 5)
@@ -462,7 +462,7 @@ void MenuLedAnimation()
 				numberToDisplay[5] = tmpAnimation;
 				DisplaySetData6Num(numberToDisplay);
 				break;
-			case PRESS_RIGHT:
+			case PRESS_L:
 				tmpAnimation--;
 
 				if(tmpAnimation >= 5)
@@ -509,12 +509,12 @@ void MenuDigitAnimation()
 		controlState = ControlCheck();
 
 		/*display number on display*/
-		if (controlState == PRESS_LEFT || controlState == PRESSED_LEFT)
+		if (controlState == PRESS_R || controlState == PRESSED_R)
 		{
 			digitAnumation = digitAnumation ? 0 : 1;
 			DisplaySetAnimation(digitAnumation);
 		}
-		else if(controlState == PRESS_RIGHT || controlState == PRESSED_RIGHT)
+		else if(controlState == PRESS_L || controlState == PRESSED_L)
 		{
 			digitAnumation = digitAnumation ? 0 : 1;
 			DisplaySetAnimation(digitAnumation);
