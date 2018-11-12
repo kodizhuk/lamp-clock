@@ -100,8 +100,6 @@ uint8_t StartMenu(void)
 				DisplaySetBlinkDigit(digitBlink);
 
 				LedOffAll();
-				//LedUpdate();
-				DisplayRequestUpdateLed();
 				LedSetColor(selectMenu, colorBacklightChoice);
 				DisplayRequestUpdateLed();
 				_delay_ms(100);
@@ -118,8 +116,6 @@ uint8_t StartMenu(void)
 				DisplaySetBlinkDigit(digitBlink);
 
 				LedOffAll();
-				//LedUpdate();
-				DisplayRequestUpdateLed();
 				LedSetColor(selectMenu, colorBacklightChoice);
 				DisplayRequestUpdateLed();
 				_delay_ms(100);
