@@ -35,7 +35,7 @@ control_result ControlCheck()
 		permissNextClick[0] = 1;
 	}
 	//second
-	if(bit_is_clear(PIND, BTN1))
+	if(bit_is_clear(PIND, BTN2))
 	{
 		if(permissNextClick[1])
 		{
@@ -48,7 +48,7 @@ control_result ControlCheck()
 		permissNextClick[1] = 1;
 	}
 	//third
-	if(bit_is_clear(PIND, BTN2))
+	if(bit_is_clear(PIND, BTN1))
 	{
 		if(permissNextClick[2])
 		{
