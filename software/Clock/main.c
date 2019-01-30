@@ -199,10 +199,10 @@ void CheckUpdateTime()
 	/*display date & update brightness every 1s*/
 	if(++countToDateDisplay >= DELAY_TO_DATE)
 	{
- 		rtc_get_date(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
+ 		//rtc_get_date(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
  			
- 		if(countToDateDisplay >= DELAY_TO_DATE + TIME_DISPLAY_DATE)	//delay to display date
- 			countToDateDisplay = 0;
+//  		if(countToDateDisplay >= DELAY_TO_DATE + TIME_DISPLAY_DATE)	//delay to display date
+  			countToDateDisplay = 0;
 	}else if(rtc_check_sqw())
 	{
 		rtc_get_time(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
