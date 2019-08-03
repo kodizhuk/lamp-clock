@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="11" oldestCompatibleVersion="11" GPDVersion="6.17.001" lastChange="07.05.2019 01:22">
+<GPDProject version="11" oldestCompatibleVersion="11" GPDVersion="6.19.004" lastChange="04.08.2019 01:26">
     <generalProjectSettings/>
     <chip family="04" type="03" friendlyName="GreenPAK 3" partNumber="6" package="2">
-        <nvmData registerLenght="512">0 0 0 0 0 0 0 0 0 0 0 0 0 E8 8C 0 0 0 0 0 10 0 F0 1 60 0 0 0 0 0 0 0 0 40 0 0 0 80 0 C4 18 60 11 4 E0 0 9 E0 1 66 40 C4 C0 30 2 80 1B 0 0 5A 28 0 0 A5</nvmData>
-        <checksum crc32="0x24169741" version="0"/>
+        <nvmData registerLenght="512">0 0 40 23 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 10 0 F0 1 28 0 0 0 4 0 0 0 0 40 0 0 0 80 0 C4 18 60 12 4 E0 0 9 E0 1 66 40 C4 C0 30 2 80 1B 0 0 5A 28 0 0 A5</nvmData>
+        <checksum crc32="0xDAD142A4" version="0"/>
         <VDDItem id="0">
             <item id="0" caption="VDD (PIN 1)">
                 <graphics pos="(-232.00,-325.00)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
@@ -57,7 +57,7 @@
         </IOPad>
         <LUT id="12" regularShape="0" mode="0">
             <item id="12" caption="2-bit LUT0/DFF/LATCH0">
-                <graphics pos="(50.00,-390.00)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(332.03,-59.28)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="13" regularShape="0" mode="0">
@@ -82,7 +82,7 @@
         </LUT>
         <LUT id="17" regularShape="0" mode="0">
             <item id="17" caption="3-bit LUT3">
-                <graphics pos="(345.00,-90.00)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(269.93,56.09)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="18" regularShape="0" mode="0">
@@ -101,7 +101,7 @@
             </item>
         </LUT>
         <item id="21" caption="A CMP0">
-            <graphics pos="(-45.00,-208.00)" angle="0" flipping="0" hidden="0" tOrigin="(22.50,25.00)"/>
+            <graphics pos="(107.17,15.19)" angle="0" flipping="0" hidden="1" tOrigin="(22.50,25.00)"/>
             <textLabel pos="(-1.00,-28.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">227mA</textLabel>
         </item>
         <item id="22" caption="A CMP1">
@@ -110,7 +110,7 @@
         </item>
         <CNTDLY id="23" externalClockFrequence="0" externalClockFreqUnit="kHz">
             <item id="23" caption="8-bit CNT0/DLY0">
-                <graphics pos="(102.00,-121.00)" angle="0" flipping="0" hidden="0" tOrigin="(30.00,16.00)"/>
+                <graphics pos="(78.91,-121.00)" angle="0" flipping="0" hidden="0" tOrigin="(30.00,16.00)"/>
             </item>
         </CNTDLY>
         <CNTDLY id="24" externalClockFrequence="0" externalClockFreqUnit="kHz">
@@ -129,7 +129,7 @@
             </item>
         </LUT>
         <item id="27" caption="OSC">
-            <graphics pos="(-69.00,-318.00)" angle="0" flipping="0" hidden="0" tOrigin="(25.00,16.00)"/>
+            <graphics pos="(-69.00,-318.00)" angle="0" flipping="0" hidden="1" tOrigin="(25.00,16.00)"/>
         </item>
         <item id="28" caption="P DLY/FILTER">
             <graphics pos="(99.00,-412.00)" angle="0" flipping="0" hidden="1" tOrigin="(27.50,15.00)"/>
@@ -147,22 +147,19 @@
             <points/>
         </wire>
         <wire output="6" input="114" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" protected="1" CWLid="0" wireText="NET0" wireState="0">
-            <points>(-176.00,-75.00); (-68.00,-75.00); (-68.00,-72.00); (-58.00,-72.00)</points>
+            <points>(-176.00,-75.00); (-81.00,-75.00); (-81.00,-72.00); (-58.00,-72.00)</points>
         </wire>
         <wire output="57" input="126" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="2" wireText="NET2" wireState="0">
-            <points>(182.00,-105.00); (198.00,-106.00)</points>
+            <points>(159.00,-105.00); (187.00,-105.00); (187.00,-106.00); (198.00,-106.00)</points>
         </wire>
-        <wire output="32" input="10" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="3" wireText="NET3" wireState="0">
-            <points>(400.00,-74.00); (417.00,-74.00)</points>
+        <wire output="58" input="157" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="1" wireText="NET1" wireState="0">
+            <points>(299.00,-111.00); (305.00,-111.00); (305.00,-54.00); (316.00,-54.00)</points>
         </wire>
-        <wire output="58" input="63" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="4" wireText="NET4" wireState="0">
-            <points>(299.00,-111.00); (319.00,-111.00); (319.00,-88.00); (329.00,-88.00)</points>
+        <wire output="87" input="10" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="3" wireText="NET3" wireState="0">
+            <points>(387.00,-44.00); (406.00,-44.00); (406.00,-74.00); (417.00,-74.00)</points>
         </wire>
-        <wire output="54" input="61" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="6" wireText="NET6" wireState="0">
-            <points>(28.00,-58.00); (299.00,-58.00); (299.00,-61.00); (329.00,-61.00)</points>
-        </wire>
-        <wire output="53" input="62" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="5" wireText="NET5" wireState="0">
-            <points>(20.00,-182.00); (309.00,-182.00); (309.00,-74.00); (329.00,-74.00)</points>
+        <wire output="54" input="156" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="4" wireText="NET4" wireState="0">
+            <points>(28.00,-58.00); (291.00,-58.00); (291.00,-34.00); (316.00,-34.00)</points>
         </wire>
     </chip>
     <emulatorConfiguration version="1">
@@ -191,8 +188,8 @@
                         <TPC ID="1" Type="8">
                             <BaseOption LEDEnable="0" LEDInvertion="0" HotKey="81" GlobalLink="0"/>
                             <GeneratorOpt GenType="5">
-                                <constantVoltageGenerator v="3.299377e+0|4">
-                                    <abstractGenerator repeat="0" repeatCount="0" shownPeriod="0" startPoint="0.000000e+0|5" stopPoint="1.000000e-2|5" pauseState="0" prestartState="1" outputState="0" prestartDelay="0.000000e+0|5" endState="0" link="0" sync="0"/>
+                                <constantVoltageGenerator v="3.299377e+00|4">
+                                    <abstractGenerator repeat="0" repeatCount="0" shownPeriod="0" startPoint="0.000000e+00|5" stopPoint="1.000000e-01|5" pauseState="0" prestartState="1" outputState="0" prestartDelay="0.000000e+00|5" endState="0" link="0" sync="0"/>
                                 </constantVoltageGenerator>
                             </GeneratorOpt>
                         </TPC>
@@ -205,14 +202,19 @@
                         <TPC ID="4" Type="1">
                             <BaseOption LEDEnable="0" LEDInvertion="0" HotKey="82" GlobalLink="1"/>
                         </TPC>
-                        <TPC ID="6" Type="1">
+                        <TPC ID="6" Type="8">
                             <BaseOption LEDEnable="0" LEDInvertion="0" HotKey="89" GlobalLink="1"/>
+                            <GeneratorOpt GenType="5">
+                                <constantVoltageGenerator v="8.997070e+02|5">
+                                    <abstractGenerator repeat="0" repeatCount="2" shownPeriod="0" startPoint="0.000000e+00|5" stopPoint="1.000000e-01|5" pauseState="0" prestartState="0" outputState="0" prestartDelay="0.000000e+00|5" endState="0" link="1" sync="0"/>
+                                </constantVoltageGenerator>
+                            </GeneratorOpt>
                         </TPC>
                         <TPC ID="11" Type="3">
                             <BaseOption LEDEnable="0" LEDInvertion="0" HotKey="-1" GlobalLink="1"/>
                         </TPC>
                         <TPC ID="12" Type="1">
-                            <BaseOption LEDEnable="0" LEDInvertion="0" HotKey="65" GlobalLink="1"/>
+                            <BaseOption LEDEnable="1" LEDInvertion="0" HotKey="65" GlobalLink="1"/>
                         </TPC>
                         <TPC ID="13" Type="1">
                             <BaseOption LEDEnable="0" LEDInvertion="0" HotKey="83" GlobalLink="1"/>
@@ -228,31 +230,80 @@
             </lastConfiguration>
             <savedConfigurations/>
         </platform>
-        <platform id="3" friendlyName="Software Simulation"/>
     </emulatorConfiguration>
-    <simulationConfiguration version="4" compatibleVersion="4" activePreset="-1">
+    <simulationConfiguration version="5" compatibleVersion="5" activePreset="-1">
         <draftPreset>
-            <simulationPreset index="-1" name="Default">
-                <tran max="2.000000e+1|6" start="0.000000e+0|5" step="2.000000e+1|6" stop="3.000000e+0|5" temp="25" uic="false" vdd="3.300000e+0|4"/>
+            <simulationPreset index="-1" name="Default" customGroupLayout="true">
+                <tran max="2.000000e+01|6" start="0.000000e+00|5" step="2.000000e+01|6" stop="1.000000e+01|5" temp="25" uic="false" vdd="3.300000e+00|4"/>
                 <probes>
-                    <probe model_id="28" term_id="2"/>
+                    <probe category="0" componentType="2" componentNumber="8" pinNumber="0"/>
+                    <probe category="0" componentType="7" componentNumber="3" pinNumber="0"/>
+                    <probe category="0" componentType="16" componentNumber="0" pinNumber="0"/>
+                    <probe category="0" componentType="16" componentNumber="1" pinNumber="0"/>
+                    <probe category="1" componentType="6" componentNumber="0" pinNumber="0"/>
                 </probes>
                 <gnds>
-                    <gnd model_id="36" term_id="0"/>
+                    <gnd category="0" componentType="0" componentNumber="0" pinNumber="0"/>
                 </gnds>
                 <voltageSources>
-                    <vsrc model_id="35" term_id="0" hasRC="1" intR="1.000000e+1|4" intC="1.000000e+2|7" showOnePer="0" hasLimitedVoltage="0" td="0.000000e+0|5" viewName="VDD" V="3.300000e+0|4" tr="1.000000e+0|5" type="ramp"/>
+                    <vsrc category="0" componentType="1" componentNumber="0" pinNumber="0" hasRC="1" intR="1.000000e+01|4" intC="1.000000e+02|7" showOnePer="0" hasLimitedVoltage="0" td="0.000000e+00|5" viewName="VDD" V="3.300000e+00|4" tr="1.000000e+00|5" type="ramp"/>
+                    <vsrc category="0" componentType="2" componentNumber="6" pinNumber="0" hasRC="0" intR="1.000000e+01|4" intC="1.000000e+01|8" showOnePer="0" hasLimitedVoltage="1" td="0.000000e+00|4" viewName="PIN 6 (Src)" V="9.000000e+02|5" type="dc"/>
                 </voltageSources>
-                <groups/>
+                <groups>
+                    <group name="[S] VDD">
+                        <waveforms>
+                            <waveform category="0" componentType="1" componentNumber="0" pinNumber="0"/>
+                        </waveforms>
+                    </group>
+                    <group name="[S] PIN 6 (Src)">
+                        <waveforms>
+                            <waveform category="0" componentType="2" componentNumber="6" pinNumber="0"/>
+                        </waveforms>
+                    </group>
+                    <group name="[P] 2-bit LUT0 -&gt; OUT">
+                        <waveforms>
+                            <waveform category="1" componentType="6" componentNumber="0" pinNumber="0"/>
+                        </waveforms>
+                    </group>
+                    <group name="[P] CNT0/DLY0 -&gt; OUT">
+                        <waveforms>
+                            <waveform category="0" componentType="16" componentNumber="0" pinNumber="0"/>
+                        </waveforms>
+                    </group>
+                    <group name="[P] CNT1/DLY1 -&gt; OUT">
+                        <waveforms>
+                            <waveform category="0" componentType="16" componentNumber="1" pinNumber="0"/>
+                        </waveforms>
+                    </group>
+                    <group name="[P] PIN 8 &lt;- EXT. IN/OUT">
+                        <waveforms>
+                            <waveform category="0" componentType="2" componentNumber="8" pinNumber="0"/>
+                        </waveforms>
+                    </group>
+                </groups>
                 <waveforms>
-                    <waveform name="[P] PIN 8 &lt;- EXT. IN/OUT" model_id="28" term_id="2">
-                        <waveformSetup penColor="#2e8eff" penWidth="2" style="0" attributes="1" symbol="-1" symSize="6" symColor="#ff0000"/>
-                    </waveform>
-                    <waveform name="[S] VDD" model_id="35" term_id="0">
+                    <waveform category="0" componentType="1" componentNumber="0" pinNumber="0" name="[S] VDD">
                         <waveformSetup penColor="#26e056" penWidth="2" style="0" attributes="1" symbol="-1" symSize="6" symColor="#ff0000"/>
                     </waveform>
+                    <waveform category="0" componentType="2" componentNumber="6" pinNumber="0" name="[S] PIN 6 (Src)">
+                        <waveformSetup penColor="#fff940" penWidth="2" style="0" attributes="1" symbol="-1" symSize="6" symColor="#ff0000"/>
+                    </waveform>
+                    <waveform category="0" componentType="2" componentNumber="8" pinNumber="0" name="[P] PIN 8 &lt;- EXT. IN/OUT">
+                        <waveformSetup penColor="#2e8eff" penWidth="2" style="0" attributes="1" symbol="-1" symSize="6" symColor="#ff0000"/>
+                    </waveform>
+                    <waveform category="0" componentType="7" componentNumber="3" pinNumber="0" name="[P] 3-bit LUT3 -&gt; OUT">
+                        <waveformSetup penColor="#9bc74d" penWidth="2" style="0" attributes="1" symbol="-1" symSize="6" symColor="#ff0000"/>
+                    </waveform>
+                    <waveform category="0" componentType="16" componentNumber="0" pinNumber="0" name="[P] CNT0/DLY0 -&gt; OUT">
+                        <waveformSetup penColor="#fd6bfa" penWidth="2" style="0" attributes="1" symbol="-1" symSize="6" symColor="#ff0000"/>
+                    </waveform>
+                    <waveform category="0" componentType="16" componentNumber="1" pinNumber="0" name="[P] CNT1/DLY1 -&gt; OUT">
+                        <waveformSetup penColor="#f66a21" penWidth="2" style="0" attributes="1" symbol="-1" symSize="6" symColor="#ff0000"/>
+                    </waveform>
+                    <waveform category="1" componentType="6" componentNumber="0" pinNumber="0" name="[P] 2-bit LUT0 -&gt; OUT">
+                        <waveformSetup penColor="#5cd4ae" penWidth="2" style="0" attributes="1" symbol="-1" symSize="6" symColor="#ff0000"/>
+                    </waveform>
                 </waveforms>
-                <simIdItemMode/>
                 <xtals/>
             </simulationPreset>
         </draftPreset>
