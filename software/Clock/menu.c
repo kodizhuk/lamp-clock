@@ -497,6 +497,7 @@ void MenuLedAnimation()
 
 void MenuDigitAnimation()
 {
+	autoExitMs = 0;
 	uint8_t secondCounter = 0;
 	controlState = NO_PRESS;
 	DisplayClear();
@@ -514,22 +515,17 @@ void MenuDigitAnimation()
 	 
 	DisplaySetAnimation(digitAnumation);
 	 
-	while(controlState != PRESS_CENTER)
+	while(controlState != PRESS_CENTER && autoExitMs <= TIME_TO_AUTOEXIT)
 	{
 		controlState = ControlCheck();
 
 		/*display number on display*/
-		if (controlState == PRESS_R || controlState == PRESSED_R)
+		if (controlState == PRESS_R || controlState == PRESSED_R || controlState == PRESS_L || controlState == PRESSED_L)
 		{
 			digitAnumation = digitAnumation ? 0 : 1;
 			DisplaySetAnimation(digitAnumation);
-		}
-		else if(controlState == PRESS_L || controlState == PRESSED_L)
-		{
-			digitAnumation = digitAnumation ? 0 : 1;
-			DisplaySetAnimation(digitAnumation);
-		}
-		else if (controlState == PRESS_CENTER)
+			autoExitMs = 0;
+		}else if (controlState == PRESS_CENTER)
 		{
 			eeprom_write_byte(&eepDisplayAnimation, digitAnumation);	//static color led animation
 		}
@@ -542,6 +538,7 @@ void MenuDigitAnimation()
 			DisplaySetData3Num(dataToDisplay);
 			
 		}
+		autoExitMs+=100;
 		_delay_ms(100);
 	}
 }
@@ -565,7 +562,7 @@ void MenuTubeTraning()
 	DisplayRequestUpdateLed();
 	
 
-	while(controlState != PRESS_CENTER)
+	while(controlState != PRESS_CENTER && autoExitMs <= TIME_TO_AUTOEXIT)
 	{
  		controlState = ControlCheck();
 
@@ -576,7 +573,8 @@ void MenuTubeTraning()
 				LedSetColorRGBAllLed(0,255,0);
 			else
 				LedSetColorRGBAllLed(255,0,0);			
-			DisplayRequestUpdateLed();		
+			DisplayRequestUpdateLed();	
+			autoExitMs = 0;	
 	  	}
 	 	else if (controlState == PRESS_CENTER)
 	 	{
@@ -610,5 +608,6 @@ void MenuTubeTraning()
  		}
 
  		_delay_ms(100);
+		 autoExitMs+=100;
 	}	 
 }
