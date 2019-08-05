@@ -56,6 +56,7 @@ uint8_t EEMEM eepNumLedAnimation;
 uint8_t EEMEM eepNumDigitAnimation;
 uint8_t EEMEM eepDisplayAnimation;
 uint8_t EEMEM eepLedColor[3];
+uint8_t EEMEM eepTubeRecoveryOn;
 
 void Init(void);
 void Loading(void);
@@ -328,6 +329,7 @@ void RestoreSettingsFromEeprom()
 		eeprom_write_byte(&eepNumDigitAnimation, 0);
 		eeprom_write_byte(&eepDisplayAnimation, 1);		//0-short, 1 - long animation
 		eeprom_write_byte(&eepIsExist, 0x00);
+		eeprom_write_byte(&eepTubeRecoveryOn, 0x01);
 	}
 
 	//LedSetBrigtness(eeprom_read_byte(&eepBrightnessLedMax));
