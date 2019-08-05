@@ -21,6 +21,7 @@
  void MenuLedStaticColor();
  void MenuLedAnimation();
  void MenuDigitAnimation();
+ void MenuTubeTraning();
 
  extern void RestoreSettingsFromEeprom(void);
 
@@ -34,7 +35,7 @@
  extern uint8_t EEMEM eepNumDigitAnimation;
  extern uint8_t EEMEM eepDisplayAnimation;
  extern uint8_t EEMEM eepLedColor[3];
-
+ extern uint8_t EEMEM eepTubeRecoveryOn;
 
  enum {DAY_MODE, NIGHT_MODE};
 static uint8_t brigthessMode = DAY_MODE;
@@ -83,11 +84,9 @@ uint8_t StartMenu(void)
 		DisplaySetBlinkDigit(digitBlink);
 
 		LedOffAll();
-		//LedUpdate();
-		DisplayRequestUpdateLed();																	//enable led only "select menu" digit
-		LedSetColor(selectMenu, colorBacklightChoice);
-		for(i = 4; i < 6; i++)
-			DisplayRequestUpdateLed();
+		//LedUpdate();																			
+		LedSetColor(selectMenu, colorBacklightChoice);	//enable led only "select menu" digit
+		DisplayRequestUpdateLed();
 
 		while(((controlState = ControlCheck()) != PRESS_CENTER) && autoExitMs <= TIME_TO_AUTOEXIT)
 		{
@@ -161,6 +160,9 @@ uint8_t StartMenu(void)
 				controlState = PRESS_CENTER;
 				break;
 			case 4:
+				MenuTubeTraning();
+				selectMenu = 5;
+				controlState = PRESS_CENTER;
 				break;
 			case 5:		//exit
 				DisplayClear();
@@ -215,7 +217,6 @@ void MenuTime()
 
 	LedOffAll();
 	//LedUpdate();
-	DisplayRequestUpdateLed();
 	for(i = 0; i < 2; i++)
 		LedSetColor(i, colorBacklightChoice);
 	DisplayRequestUpdateLed();
@@ -346,7 +347,6 @@ void MenuTime()
 
 	LedOffAll();
 	//LedUpdate();
-	DisplayRequestUpdateLed();
 	dataToDisplay[0] = 0;
 	dataToDisplay[1] = 0;
 	dataToDisplay[2] = 0;
@@ -544,4 +544,71 @@ void MenuDigitAnimation()
 		}
 		_delay_ms(100);
 	}
+}
+
+void MenuTubeTraning()
+{
+	uint8_t secondCounter = 0;
+	controlState = NO_PRESS;
+	DisplayClear();
+	DisplaySetBrightness100(100);
+	dataToDisplay[0] = 0;
+	dataToDisplay[1] = 0;
+	dataToDisplay[2] = 0;
+	DisplaySetData3Num(dataToDisplay);
+	DisplaySetAnimation(eeprom_read_byte(&eepDisplayAnimation));
+	uint8_t tubeTraningOn = eeprom_read_byte(&eepTubeRecoveryOn);
+	if(tubeTraningOn)
+		LedSetColorRGBAllLed(0,255,0);
+	else
+		LedSetColorRGBAllLed(255,0,0);
+	DisplayRequestUpdateLed();
+	
+
+	while(controlState != PRESS_CENTER)
+	{
+ 		controlState = ControlCheck();
+
+	  	if (controlState == PRESS_R || controlState == PRESSED_R || controlState == PRESS_L || controlState == PRESSED_L)
+	  	{
+	 	 	tubeTraningOn = tubeTraningOn ? 0 : 1;		//invert data
+			if(tubeTraningOn)
+				LedSetColorRGBAllLed(0,255,0);
+			else
+				LedSetColorRGBAllLed(255,0,0);			
+			DisplayRequestUpdateLed();		
+	  	}
+	 	else if (controlState == PRESS_CENTER)
+	 	{
+	 		eeprom_write_byte(&eepTubeRecoveryOn, tubeTraningOn);		//save data
+	 	}
+
+ 		if(++secondCounter >= 10)
+ 		{
+	 		secondCounter = 0;
+	 		if(++dataToDisplay[2] >= 5)
+	 		{
+ 				if(tubeTraningOn)
+ 				{
+ 		 			DisplaySetAnimation(0);
+ 		 			uint8_t i = 110;
+ 		 			do
+ 		 			{
+ 			 			i-=11;
+ 			 			dataToDisplay[0] = i;
+ 			 			dataToDisplay[1] = i;
+ 			 			dataToDisplay[2] = i;
+ 			 			DisplaySetData3Num(dataToDisplay);
+ 			 			_delay_ms(20);
+ 		 			} while (i>0);
+ 		 			DisplaySetAnimation(1);
+				}else{
+					dataToDisplay[2] = 0;
+				}	
+			}
+			DisplaySetData3Num(dataToDisplay);
+ 		}
+
+ 		_delay_ms(100);
+	}	 
 }
