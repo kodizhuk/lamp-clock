@@ -206,16 +206,32 @@ void CheckUpdateTime()
   			countToDateDisplay = 0;
 	}else if(rtc_check_sqw())
 	{
+		//recovery mode
+		if(dataToDisplay[2] == 59 && eeprom_read_byte(&eepTubeRecoveryOn))
+		{
+			uint8_t i = 110;
+			DisplaySetAnimation(0);
+			do
+			{
+				i-=11;
+				dataToDisplay[0] = i;
+				dataToDisplay[1] = i;
+				dataToDisplay[2] = i;
+				DisplaySetData3Num(dataToDisplay);
+				_delay_ms(20);
+			} while (i>0);
+			DisplaySetAnimation(eeprom_read_byte(&eepDisplayAnimation));
+		}
+		
 		rtc_get_time(&dataToDisplay[0], &dataToDisplay[1], &dataToDisplay[2]);
 
 		/*change brightness*/
- 		LedSetBrigtness(BrightnessGet());
+ 		LedSetBrigtness(BrightnessGet());	
 	}
 
 	DisplaySetData3Num(dataToDisplay);
 
 	SetTaskTimer(ACTION1, 10);
-
 }
 
 void VerifyControl()
