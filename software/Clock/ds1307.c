@@ -42,10 +42,9 @@ unsigned char bin(unsigned char dec){
 	return bcd;
 }
 
-
+//rs- rate select - square-wave out frequency
 void rtc_init(unsigned char rs, unsigned char sqwe, unsigned char out)
 {
-	rs&=18;
 	if (sqwe) rs|=0x40;
 	if (out) rs|=0x80;
 	i2c_start();

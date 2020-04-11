@@ -38,9 +38,9 @@ After 10 sec will be auto exit if any button not pressed.
 - 6x IN12 - vacuum tubes
 - 6x WS2812 - led for backlight
 
-![](./foto/foto2.jpg)
 ![](./foto/foto3.jpg)
-
+![](./foto/foto4.jpg)
+![](./foto/foto5.jpg)
 <!-- [PCB video](https://www.instagram.com/p/Bldvv9dl7gn/?utm_source=ig_share_sheet&igshid=g3wekemrw5ij) -->
  
  
